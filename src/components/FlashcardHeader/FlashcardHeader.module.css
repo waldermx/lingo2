@@ -1,27 +1,41 @@
-/* src/components/FlashcardHeader/FlashcardHeader.module.css */
+/* src/components/FlashcardHeader/FlashcardHeader.module.css - VERSIÓN CORREGIDA */
 .header {
   background: var(--color-surface);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08); /* Sombra más sutil */
+  height: 56px; /* Altura estándar Material Design */
+  display: flex;
+  align-items: center;
 }
 
 .backButton {
   color: var(--color-primary);
   margin-left: 4px;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  --padding-start: 0;
+  --padding-end: 0;
 }
 
 .titleContainer {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: var(--spacing-sm);
+  gap: var(--grid-1); /* 8px */
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
+  top: 0;
+  height: 100%;
+  padding: 0 var(--grid-1);
 }
 
 .moduleIcon {
   color: var(--color-primary);
-  font-size: 24px;
+  font-size: 20px; /* Reducido para mejor proporción */
+  opacity: 0.9;
 }
 
 .title {
@@ -30,32 +44,70 @@
   margin: 0;
   padding: 0;
   text-align: center;
+  font-size: var(--font-size-md);
+  line-height: 1;
 }
 
 .progressContainer {
   display: flex;
   align-items: center;
-  margin-right: var(--spacing-sm);
+  justify-content: center;
+  margin-right: var(--grid-1); /* 8px */
+  height: 100%;
 }
 
 .progressText {
-  font-size: 14px;
+  font-size: 13px; /* Tamaño específico para mejor legibilidad */
   font-weight: 600;
   color: var(--color-primary);
   background: rgba(46, 125, 50, 0.1);
-  padding: 4px 8px;
-  border-radius: 12px;
+  padding: 4px 10px; /* Padding consistente */
+  border-radius: 12px; /* Radio consistente */
   min-width: 40px;
   text-align: center;
+  line-height: 1;
 }
 
-/* Responsive */
+/* Asegurar alineación vertical perfecta */
+ion-toolbar {
+  --min-height: 56px;
+  display: flex;
+  align-items: center;
+}
+
+/* Responsive - mantener alineación en pantallas pequeñas */
 @media (max-width: 320px) {
   .moduleIcon {
-    display: none;
+    display: none; /* Ocultar en pantallas muy pequeñas para más espacio */
   }
   
   .title {
-    font-size: 16px;
+    font-size: 15px;
   }
+  
+  .progressText {
+    font-size: 12px;
+    padding: 3px 8px;
+  }
+}
+
+/* iOS specific - safe area top */
+.ios .header {
+  padding-top: env(safe-area-inset-top, 0);
+  height: calc(56px + env(safe-area-inset-top, 0));
+}
+
+.ios .titleContainer {
+  top: env(safe-area-inset-top, 0);
+}
+
+/* Android specific - altura consistente */
+.md .header {
+  height: 56px;
+}
+
+/* Asegurar que el contenido no se solape con safe areas */
+:host-context(.ios) .header {
+  padding-top: constant(safe-area-inset-top);
+  padding-top: env(safe-area-inset-top);
 }

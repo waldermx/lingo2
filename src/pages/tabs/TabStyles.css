@@ -1,0 +1,122 @@
+/* src/pages/tabs/TabStyles.css */
+.tab-header {
+  background: var(--color-surface);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.tab-content {
+  --background: var(--color-background);
+  --padding-top: var(--spacing-md);
+  --padding-bottom: var(--spacing-md);
+}
+
+.tab-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-md);
+}
+
+/* Placeholder card */
+.placeholder-card {
+  background: var(--color-surface);
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-sm);
+  margin-top: var(--spacing-xl);
+}
+
+.placeholder-content {
+  text-align: center;
+  padding: var(--spacing-xl) var(--spacing-lg);
+}
+
+.placeholder-icon {
+  font-size: 48px;
+  margin-bottom: var(--spacing-md);
+  opacity: 0.6;
+}
+
+.placeholder-content h3 {
+  color: var(--color-text);
+  margin-bottom: var(--spacing-sm);
+  font-weight: 600;
+}
+
+.placeholder-content p {
+  color: var(--color-text-light);
+  margin-bottom: var(--spacing-xs);
+}
+
+.placeholder-content small {
+  color: var(--color-text-lighter);
+  font-style: italic;
+}
+
+/* Practice tab specific */
+.practice-button-container {
+  margin: var(--spacing-xl) 0;
+  padding: 0 var(--spacing-sm);
+}
+
+.start-practice-button {
+  --background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
+  --background-activated: var(--color-primary);
+  --color: white;
+  --border-radius: var(--border-radius-md);
+  height: 56px;
+  font-weight: 600;
+  font-size: var(--font-size-lg);
+  box-shadow: var(--shadow-md);
+}
+
+.progress-summary-card {
+  background: var(--color-surface);
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-sm);
+  margin-top: var(--spacing-lg);
+}
+
+.summary-title {
+  color: var(--color-text);
+  font-size: var(--font-size-md);
+  font-weight: 600;
+  margin-bottom: var(--spacing-md);
+  text-align: center;
+  opacity: 0.9;
+}
+
+.stat-item {
+  text-align: center;
+  padding: var(--spacing-sm);
+}
+
+.stat-value {
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+  color: var(--color-primary);
+  margin-bottom: 4px;
+}
+
+.stat-label {
+  font-size: var(--font-size-sm);
+  color: var(--color-text);
+  font-weight: 500;
+  margin-bottom: 2px;
+}
+
+.stat-subtext {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-light);
+  opacity: 0.8;
+}
+
+/* Dark mode adjustments */
+@media (prefers-color-scheme: dark) {
+  .placeholder-card,
+  .progress-summary-card {
+    background: #2d2d2d;
+  }
+  
+  .stat-value {
+    color: #4CAF50;
+  }
+}

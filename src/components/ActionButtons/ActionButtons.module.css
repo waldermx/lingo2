@@ -1,12 +1,12 @@
-/* src/components/ActionButtons/ActionButtons.module.css */
+/* src/components/ActionButtons/ActionButtons.module.css - VERSIÓN CORREGIDA */
 .container {
   width: 100%;
-  margin-top: var(--spacing-xl);
+  margin-top: var(--grid-3); /* 24px */
 }
 
 .grid {
   --ion-grid-padding: 0;
-  --ion-grid-column-padding: var(--spacing-sm);
+  --ion-grid-column-padding: var(--grid-1); /* 8px */
 }
 
 .row {
@@ -14,30 +14,31 @@
 }
 
 .col {
-  padding: var(--spacing-xs);
+  padding: var(--grid-1); /* 8px */
 }
 
 .button {
-  height: 56px;
+  height: 48px; /* Reducido de 56px para mejor proporción */
   font-weight: 600;
   font-size: var(--font-size-md);
-  border-radius: var(--border-radius-md);
-  box-shadow: var(--shadow-md);
+  border-radius: var(--border-radius-md); /* 16px - consistente */
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1); /* Sombra consistente */
   transition: all 0.2s ease;
   position: relative;
   overflow: hidden;
   margin: 0;
   text-transform: none;
   letter-spacing: normal;
+  --border-radius: var(--border-radius-md);
 }
 
 .button:active {
-  transform: translateY(2px);
-  box-shadow: var(--shadow-sm);
+  transform: translateY(1px); /* Más sutil */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .button:disabled {
-  opacity: 0.6;
+  opacity: 0.5;
   transform: none;
   box-shadow: none;
 }
@@ -46,29 +47,31 @@
   --background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
   --background-activated: var(--color-primary);
   --color: white;
+  --ripple-color: rgba(255, 255, 255, 0.3);
 }
 
 .repeatButton {
   --background: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-secondary-light) 100%);
   --background-activated: var(--color-secondary);
   --color: white;
+  --ripple-color: rgba(255, 255, 255, 0.3);
 }
 
 .buttonIcon {
-  font-size: 24px;
-  margin-right: var(--spacing-xs);
+  font-size: 20px; /* Reducido para mejor proporción */
+  margin-right: var(--grid-1); /* 8px */
 }
 
-/* Ripple effect enhancement */
+/* Ripple effect - consistente */
 .button ion-ripple-effect {
-  color: rgba(255, 255, 255, 0.4);
+  color: rgba(255, 255, 255, 0.3);
 }
 
-/* Hover effect for desktop */
+/* Hover effect para desktop */
 @media (hover: hover) and (pointer: fine) {
   .button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
   }
   
   .button:active {
@@ -76,30 +79,38 @@
   }
 }
 
-/* Small screen adjustments */
+/* Small screen adjustments - mantener proporciones */
 @media (max-width: 320px) {
   .button {
-    height: 48px;
+    height: 44px;
     font-size: var(--font-size-sm);
   }
   
   .buttonIcon {
-    font-size: 20px;
-    margin-right: 4px;
+    font-size: 18px;
+    margin-right: 6px;
+  }
+  
+  .grid {
+    --ion-grid-column-padding: 6px;
   }
 }
 
-/* Dark mode */
+/* Dark mode - sombras más sutiles */
 @media (prefers-color-scheme: dark) {
   .button {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
   }
   
   .correctButton {
-    --background: linear-gradient(135deg, #2E7D32 0%, #4CAF50 100%);
+    --background: linear-gradient(135deg, #2E7D32 0%, #388E3C 100%);
   }
   
   .repeatButton {
-    --background: linear-gradient(135deg, #FF9800 0%, #FFB74D 100%);
+    --background: linear-gradient(135deg, #F57C00 0%, #FF9800 100%);
+  }
+  
+  .button:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
   }
 }

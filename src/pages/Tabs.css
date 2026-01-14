@@ -1,0 +1,37 @@
+/* src/pages/Tabs.css */
+.tab-bar {
+  --background: var(--color-surface);
+  --border: 1px solid rgba(0, 0, 0, 0.08);
+  --color: var(--color-text-light);
+  --color-selected: var(--color-primary);
+  padding-bottom: env(safe-area-inset-bottom, 0);
+}
+
+.tab-bar ion-icon {
+  font-size: 24px;
+}
+
+.tab-bar ion-label {
+  font-size: 12px;
+  font-weight: 500;
+  margin-top: 4px;
+}
+
+/* iOS specific */
+.ios .tab-bar {
+  height: 56px;
+}
+
+/* Android specific */
+.md .tab-bar {
+  height: 60px;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+  .tab-bar {
+    --background: #2d2d2d;
+    --border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+}
