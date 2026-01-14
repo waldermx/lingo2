@@ -1,8 +1,15 @@
 import React, { useReducer, useState, useEffect } from 'react';
-import { 
-  IonContent, 
-  IonPage, 
+import {
+  IonContent,
+  IonPage,
   IonLoading,
+  IonModal,
+  IonHeader,
+  IonToolbar,
+  IonTitle,
+  IonButtons,
+  IonButton,
+  IonIcon,
   useIonRouter
 } from '@ionic/react';
 import { flashcardReducer, initialState } from '../reducers/flashcardReducer';
@@ -13,6 +20,7 @@ import ActionButtons from '../components/ActionButtons/ActionButtons';
 import DefinitionFooter from '../components/DefinitionFooter/DefinitionFooter';
 import styles from './FlashcardScreen.module.css';
 import '../styles/variables.css';
+import { close } from 'ionicons/icons';
 
 // Datos de ejemplo (en producción vendrían de una API/store)
 const SAMPLE_CHARACTERS = [
@@ -20,8 +28,8 @@ const SAMPLE_CHARACTERS = [
     id: '1',
     character: '爱',
     pinyin: 'ài',
-    definition: 'love, affection, to be fond of, to like',
-    example: '我爱你 (wǒ ài nǐ) - I love you',
+    definition: 'amor, afecto, tener cariño, gustar',
+    example: '我爱你 (wǒ ài nǐ) - Te amo',
     difficulty: 'medium' as const,
     correctCount: 5
   },
@@ -29,12 +37,13 @@ const SAMPLE_CHARACTERS = [
     id: '2',
     character: '学',
     pinyin: 'xué',
-    definition: 'to study, to learn, school',
-    example: '学生 (xuéshēng) - student',
+    definition: 'estudiar, aprender, escuela',
+    example: '学生 (xuéshēng) - estudiante',
     difficulty: 'easy' as const,
     correctCount: 8
   }
 ];
+
 
 const FlashcardScreen: React.FC = () => {
   const router = useIonRouter();
@@ -43,6 +52,8 @@ const FlashcardScreen: React.FC = () => {
   const [showPinyin, setShowPinyin] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [isDefinitionExpanded, setIsDefinitionExpanded] = useState(false); // NUEVO
+
 
   const currentCharacter = SAMPLE_CHARACTERS[currentIndex];
 
@@ -93,6 +104,10 @@ const FlashcardScreen: React.FC = () => {
     setShowPinyin(!showPinyin);
   };
 
+const toggleDefinition = () => {
+    setIsDefinitionExpanded(!isDefinitionExpanded);
+  };
+
   return (
     <IonPage className={styles.page}>
       <FlashcardHeader 
@@ -103,7 +118,7 @@ const FlashcardScreen: React.FC = () => {
 
       <IonContent 
         className={`ion-padding ${styles.content}`}
-        scrollY={false}
+        scrollY={false} // Sin scroll en vista principal
         forceOverscroll={false}
       >
         <div className={styles.mainContainer}>
@@ -138,18 +153,92 @@ const FlashcardScreen: React.FC = () => {
               isLoading={isLoading}
             />
           </div>
-        </div>
 
-        {/* Footer con definición */}
-        <div className={styles.footerSection}>
-          <DefinitionFooter 
-            character={currentCharacter.character}
-            pinyin={currentCharacter.pinyin}
-            definition={currentCharacter.definition}
-            example={currentCharacter.example}
-          />
+          {/* Footer con definición - VISTA COMPACTA */}
+          <div className={styles.footerSection}>
+            <div 
+              className={styles.definitionCardCompact}
+              onClick={toggleDefinition}
+              role="button"
+              aria-label="Expand definition"
+            >
+              <div className={styles.definitionHeaderCompact}>
+                <span className={styles.definitionCharacterCompact}>
+                  {currentCharacter.character}
+                </span>
+                <span className={styles.definitionPinyinCompact}>
+                  {currentCharacter.pinyin}
+                </span>
+              </div>
+              <div className={styles.definitionTextCompact}>
+                {currentCharacter.definition.length > 60 
+                  ? `${currentCharacter.definition.substring(0, 60)}…`
+                  : currentCharacter.definition}
+              </div>
+              {currentCharacter.example && (
+                <div className={styles.definitionExampleCompact}>
+                  {currentCharacter.example.length > 50
+                    ? `${currentCharacter.example.substring(0, 50)}…`
+                    : currentCharacter.example}
+                </div>
+              )}
+              <div className={styles.definitionHintCompact}>
+                Toca para expandir
+              </div>
+            </div>
+          </div>
         </div>
       </IonContent>
+
+      {/* Modal para diccionario expandido */}
+      <IonModal
+        isOpen={isDefinitionExpanded}
+        onDidDismiss={() => setIsDefinitionExpanded(false)}
+        className={styles.definitionModal}
+        initialBreakpoint={0.75}
+        breakpoints={[0.5, 0.75, 1]}
+        handleBehavior="cycle"
+      >
+        <IonHeader>
+          <IonToolbar>
+            <IonTitle>Definición</IonTitle>
+            <IonButtons slot="end">
+              <IonButton onClick={() => setIsDefinitionExpanded(false)}>
+                <IonIcon icon={close} slot="icon-only" />
+              </IonButton>
+            </IonButtons>
+          </IonToolbar>
+        </IonHeader>
+        <IonContent className={styles.modalContent}>
+          <div className={styles.definitionCardExpanded}>
+            <div className={styles.definitionHeaderExpanded}>
+              <div className={styles.definitionCharacterExpanded}>
+                {currentCharacter.character}
+              </div>
+              <div className={styles.definitionPinyinExpanded}>
+                {currentCharacter.pinyin}
+              </div>
+            </div>
+            
+            <div className={styles.definitionTextExpanded}>
+              <div className={styles.definitionLabel}>Meaning</div>
+              <div className={styles.definitionContent}>
+                {currentCharacter.definition}
+              </div>
+            </div>
+            
+            {currentCharacter.example && (
+              <div className={styles.definitionExampleExpanded}>
+                <div className={styles.definitionLabel}>Example</div>
+                <div className={styles.definitionContent}>
+                  {currentCharacter.example}
+                </div>
+              </div>
+            )}
+            
+          </div>
+        </IonContent>
+      </IonModal>
 
       <IonLoading
         isOpen={isLoading}
@@ -159,5 +248,4 @@ const FlashcardScreen: React.FC = () => {
     </IonPage>
   );
 };
-
 export default FlashcardScreen;

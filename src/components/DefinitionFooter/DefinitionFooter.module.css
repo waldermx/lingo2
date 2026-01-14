@@ -1,90 +1,100 @@
-/* src/components/DefinitionFooter/DefinitionFooter.module.css */
+/* src/components/DefinitionFooter/DefinitionFooter.module.css - VERSIÓN CORREGIDA */
 .footer {
   width: 100%;
-  padding: var(--spacing-md) 0;
+  padding: 0;
 }
 
 .card {
   background: var(--color-surface);
-  border-radius: var(--border-radius-md);
-  padding: var(--spacing-md);
-  box-shadow: var(--shadow-sm);
-  border: 1px solid rgba(0, 0, 0, 0.05);
+  border-radius: var(--border-radius-md); /* 16px - consistente con otras tarjetas */
+  padding: var(--grid-2); /* 16px - padding consistente */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); /* Sombra más sutil */
+  border: 1px solid rgba(0, 0, 0, 0.06); /* Borde más sutil */
+  margin: 0;
 }
 
 .header {
   display: flex;
   align-items: center;
-  margin-bottom: var(--spacing-md);
-  padding-bottom: var(--spacing-sm);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  margin-bottom: var(--grid-2); /* 16px */
+  padding-bottom: var(--grid-1); /* 8px */
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08); /* Línea más sutil */
 }
 
 .characterSmall {
   font-size: var(--font-size-lg);
   font-weight: 700;
   color: var(--color-text);
-  margin-right: var(--spacing-sm);
+  margin-right: var(--grid-1); /* 8px */
   font-family: 'Noto Sans SC', sans-serif;
+  opacity: 0.9; /* Reducido para jerarquía secundaria */
 }
 
 .pinyinSmall {
   font-size: var(--font-size-md);
   color: var(--color-primary);
   font-weight: 500;
-  background: rgba(46, 125, 50, 0.1);
-  padding: 2px 8px;
-  border-radius: 12px;
+  background: rgba(46, 125, 50, 0.08); /* Más sutil */
+  padding: 4px 10px; /* Padding consistente */
+  border-radius: 12px; /* Radio consistente */
+  letter-spacing: 0.5px;
 }
 
 .definition {
   font-size: var(--font-size-md);
   color: var(--color-text);
-  line-height: 1.6;
-  margin-bottom: var(--spacing-md);
+  line-height: 1.5; /* Interlineado consistente */
+  margin-bottom: var(--grid-2); /* 16px */
+  opacity: 0.9; /* Reducido para jerarquía secundaria */
 }
 
 .example {
   background: rgba(0, 0, 0, 0.02);
-  padding: var(--spacing-sm);
-  border-radius: var(--border-radius-sm);
-  margin-bottom: var(--spacing-md);
-  border-left: 3px solid var(--color-primary);
+  padding: var(--grid-1) var(--grid-2); /* 8px 16px */
+  border-radius: var(--border-radius-sm); /* 8px */
+  margin-bottom: var(--grid-2); /* 16px */
+  border-left: 3px solid rgba(46, 125, 50, 0.3); /* Más sutil */
+  margin-left: 0; /* Asegurar alineación con el padding del contenedor */
+  margin-right: 0;
 }
 
 .exampleLabel {
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-xs);
   font-weight: 600;
   color: var(--color-text-light);
   margin-bottom: 4px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  opacity: 0.7; /* Más sutil */
 }
 
 .exampleText {
-  font-size: var(--font-size-md);
+  font-size: var(--font-size-sm); /* Reducido para jerarquía */
   color: var(--color-text);
   font-style: italic;
-  line-height: 1.5;
+  line-height: 1.4;
+  opacity: 0.8;
 }
 
 .hint {
-  font-size: var(--font-size-xs);
+  font-size: 11px; /* Más pequeño para helper text */
   color: var(--color-text-lighter);
   text-align: center;
-  padding-top: var(--spacing-sm);
-  border-top: 1px dashed rgba(0, 0, 0, 0.1);
+  padding-top: var(--grid-1); /* 8px */
+  border-top: 1px dashed rgba(0, 0, 0, 0.1); /* Línea punteada sutil */
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 4px;
+  opacity: 0.6; /* Muy sutil - claramente helper text */
+  font-style: italic;
 }
 
-/* Animation for card appearance */
+/* Animation más sutil para tarjeta secundaria */
 @keyframes slideUp {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(10px);
   }
   to {
     opacity: 1;
@@ -93,22 +103,24 @@
 }
 
 .card {
-  animation: slideUp 0.4s ease-out;
+  animation: slideUp 0.3s ease-out;
 }
 
-/* Dark mode */
+/* Dark mode - mantener jerarquía secundaria */
 @media (prefers-color-scheme: dark) {
   .card {
     background: #2d2d2d;
-    border-color: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
   }
   
   .header {
-    border-color: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.08);
   }
   
   .characterSmall {
     color: #ffffff;
+    opacity: 0.8;
   }
   
   .pinyinSmall {
@@ -118,31 +130,50 @@
   
   .definition {
     color: #cccccc;
+    opacity: 0.8;
   }
   
   .example {
     background: rgba(255, 255, 255, 0.03);
-    border-left-color: #4CAF50;
+    border-left-color: rgba(76, 175, 80, 0.3);
   }
   
   .exampleLabel {
     color: #aaaaaa;
+    opacity: 0.6;
   }
   
   .exampleText {
     color: #cccccc;
+    opacity: 0.7;
   }
   
   .hint {
     color: #888888;
     border-color: rgba(255, 255, 255, 0.1);
+    opacity: 0.5;
   }
 }
 
-/* Tablet and larger screens */
+/* Tablet y pantallas más grandes - mantener proporciones */
 @media (min-width: 768px) {
   .card {
     max-width: 500px;
     margin: 0 auto;
+  }
+}
+
+/* Asegurar que no haya desbordamiento en pantallas pequeñas */
+@media (max-width: 320px) {
+  .card {
+    padding: var(--grid-1); /* 8px en pantallas muy pequeñas */
+  }
+  
+  .header {
+    margin-bottom: var(--grid-1);
+  }
+  
+  .definition {
+    font-size: var(--font-size-sm);
   }
 }

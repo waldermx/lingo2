@@ -1,61 +1,68 @@
-/* src/components/CharacterDisplay/CharacterDisplay.module.css */
+/* src/components/CharacterDisplay/CharacterDisplay.module.css - VERSIÓN CORREGIDA */
 .container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: var(--spacing-lg);
+  padding: var(--grid-2) 0;
   user-select: none;
+  width: 100%;
 }
 
 .character {
   font-size: var(--font-size-xxl);
   font-weight: 900;
-  color: var(--color-text);
-  margin-bottom: var(--spacing-sm);
+  color: #000000; /* Negro puro para máximo contraste */
+  margin-bottom: var(--grid-1); /* 8px de separación */
   font-family: 'Noto Sans SC', 'SimHei', 'Microsoft YaHei', sans-serif;
   line-height: 1;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s ease;
-}
-
-.character:hover {
-  transform: scale(1.02);
+  min-height: 80px; /* Altura mínima para mantener consistencia */
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .pinyin {
-  font-size: var(--font-size-xl);
+  font-size: var(--font-size-lg); /* Reducido de xl para mejor jerarquía */
   color: var(--color-text-light);
-  margin-top: var(--spacing-xs);
+  margin-top: var(--grid-1); /* 8px */
   font-weight: 500;
   letter-spacing: 1px;
-  background: rgba(0, 0, 0, 0.05);
-  padding: 4px 12px;
+  background: rgba(0, 0, 0, 0.04);
+  padding: var(--grid-1) var(--grid-3);
   border-radius: 20px;
+  text-align: center;
+  min-width: 120px;
 }
 
 .pinyinPlaceholder {
   font-size: var(--font-size-sm);
   color: var(--color-text-lighter);
-  margin-top: var(--spacing-xs);
+  margin-top: var(--grid-1); /* 8px */
   font-style: italic;
-  opacity: 0.7;
+  opacity: 0.6; /* Reducido de 0.7 para menos competición visual */
   cursor: pointer;
-  padding: 8px 16px;
-  border-radius: 20px;
-  background: rgba(0, 0, 0, 0.05);
+  padding: var(--grid-1) var(--grid-2);
+  border-radius: 16px;
+  background: rgba(0, 0, 0, 0.03);
   border: 1px dashed rgba(0, 0, 0, 0.1);
+  text-align: center;
+  min-width: 200px;
+  transition: all 0.2s ease;
 }
 
 .pinyinPlaceholder:hover {
-  background: rgba(0, 0, 0, 0.08);
+  background: rgba(0, 0, 0, 0.05);
+  opacity: 0.7;
 }
 
-/* Animation for pinyin reveal */
+/* Animación para pinyin reveal */
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(-10px);
+    transform: translateY(-4px);
   }
   to {
     opacity: 1;
@@ -67,7 +74,7 @@
   animation: fadeIn 0.3s ease-out;
 }
 
-/* Dark mode support */
+/* Dark mode support - manteniendo contraste */
 @media (prefers-color-scheme: dark) {
   .character {
     color: #ffffff;
@@ -76,12 +83,25 @@
   
   .pinyin {
     color: #cccccc;
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.08);
   }
   
   .pinyinPlaceholder {
     color: #aaaaaa;
     background: rgba(255, 255, 255, 0.05);
-    border-color: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.15);
+  }
+}
+
+/* Asegurar que no haya desbordamiento en pantallas pequeñas */
+@media (max-width: 320px) {
+  .character {
+    font-size: 56px; /* Reducido de 64px */
+    min-height: 70px;
+  }
+  
+  .pinyin {
+    font-size: var(--font-size-md);
+    padding: 6px 12px;
   }
 }

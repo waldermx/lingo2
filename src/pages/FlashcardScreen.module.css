@@ -1,78 +1,232 @@
-.page {
-  background: linear-gradient(135deg, #f8fff8 0%, #f0f8ff 100%);
-}
-
+/* src/pages/FlashcardScreen.module.css - SOLO LOS CAMBIOS REQUERIDOS */
 .content {
   --background: transparent;
   display: flex;
   flex-direction: column;
   height: 100%;
+  padding: 0;
 }
 
 .mainContainer {
   flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start; /* Cambiado de space-between a flex-start */
   align-items: center;
-  padding: var(--spacing-lg);
-  padding-top: calc(var(--spacing-xxl) + env(safe-area-inset-top));
-  padding-bottom: calc(var(--spacing-xxl) + env(safe-area-inset-bottom));
+  padding: 0; /* Eliminado padding vertical excesivo */
+  padding-top: calc(var(--grid-1) + env(safe-area-inset-top, 0)); /* 8px máximo */
+  padding-bottom: calc(var(--grid-1) + env(safe-area-inset-bottom, 0)); /* 8px máximo */
+  gap: var(--grid-1); /* Reducido de 24px a 8px entre secciones */
+  min-height: 100vh; /* Asegurar que todo quepa */
+  overflow-y: hidden; /* Sin scroll en vista principal */
 }
 
 .characterSection {
-  margin-bottom: var(--spacing-xl);
+  flex: 0 0 auto;
   cursor: pointer;
   transition: transform 0.2s ease;
   text-align: center;
-}
-
-.characterSection:active {
-  transform: scale(0.98);
+  width: 100%;
+  max-width: 320px;
+  margin: 0 auto;
+  padding: var(--grid-1) 0; /* Reducido de 16px a 8px */
 }
 
 .practiceSection {
   width: 100%;
   max-width: 320px;
-  margin: var(--spacing-xl) 0;
+  margin: 0 auto;
+  flex: 0 0 auto;
+  padding: var(--grid-1) 0; /* Reducido de 16px a 8px */
 }
 
 .actionsSection {
   width: 100%;
   max-width: 320px;
-  margin-top: var(--spacing-xl);
+  margin: 0 auto;
+  flex: 0 0 auto;
+  padding: var(--grid-1) 0; /* Reducido de 16px a 8px */
+  margin-bottom: 0; /* Eliminado margen inferior excesivo */
 }
 
 .footerSection {
-  position: sticky;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
-  border-top: 1px solid rgba(0, 0, 0, 0.1);
-  padding: var(--spacing-md) var(--spacing-lg);
-  padding-bottom: calc(var(--spacing-md) + env(safe-area-inset-bottom));
+  width: 100%;
+  max-width: 320px;
+  margin: 0 auto;
+  flex: 0 0 auto;
+  padding: var(--grid-1) 0 var(--grid-2) 0; /* 8px arriba, 16px abajo para separación del borde */
+  position: relative;
+  z-index: 10;
+}
+/* src/pages/FlashcardScreen.module.css - AÑADIR DESPUÉS DE .footerSection */
+
+/* Diccionario compacto (siempre visible) */
+.definitionCardCompact {
+  background: var(--color-surface);
+  border-radius: var(--border-radius-md);
+  padding: var(--grid-1) var(--grid-2);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
 }
 
-/* Responsive adjustments */
-@media (max-height: 700px) {
-  .mainContainer {
-    padding-top: var(--spacing-lg);
-    padding-bottom: var(--spacing-lg);
+.definitionCardCompact:active {
+  transform: scale(0.98);
+  background: rgba(0, 0, 0, 0.01);
+}
+
+.definitionHeaderCompact {
+  display: flex;
+  align-items: center;
+  gap: var(--grid-1);
+  margin-bottom: 4px;
+}
+
+.definitionCharacterCompact {
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  color: var(--color-text);
+  font-family: 'Noto Sans SC', sans-serif;
+}
+
+.definitionPinyinCompact {
+  font-size: var(--font-size-sm);
+  color: var(--color-primary);
+  font-weight: 500;
+  background: rgba(46, 125, 50, 0.1);
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+
+.definitionTextCompact {
+  font-size: var(--font-size-sm);
+  color: var(--color-text);
+  line-height: 1.3;
+  margin-bottom: 4px;
+  opacity: 0.9;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.definitionExampleCompact {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-light);
+  font-style: italic;
+  line-height: 1.2;
+  margin-bottom: 4px;
+  opacity: 0.8;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.definitionHintCompact {
+  font-size: 10px;
+  color: var(--color-text-lighter);
+  text-align: center;
+  padding-top: 4px;
+  border-top: 1px dashed rgba(0, 0, 0, 0.1);
+  opacity: 0.6;
+  font-style: italic;
+}
+
+/* Diccionario expandido (en modal) */
+.definitionCardExpanded {
+  background: var(--color-surface);
+  border-radius: var(--border-radius-md);
+  padding: var(--grid-2);
+  width: 100%;
+}
+
+.definitionHeaderExpanded {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: var(--grid-2);
+  padding-bottom: var(--grid-1);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.definitionCharacterExpanded {
+  font-size: var(--font-size-xxl);
+  font-weight: 900;
+  color: var(--color-text);
+  font-family: 'Noto Sans SC', sans-serif;
+  margin-bottom: var(--grid-1);
+}
+
+.definitionPinyinExpanded {
+  font-size: var(--font-size-xl);
+  color: var(--color-primary);
+  font-weight: 500;
+  background: rgba(46, 125, 50, 0.1);
+  padding: 6px 16px;
+  border-radius: 16px;
+}
+
+.definitionLabel {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-text-light);
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  opacity: 0.7;
+}
+
+.definitionContent {
+  font-size: var(--font-size-md);
+  color: var(--color-text);
+  line-height: 1.5;
+  margin-bottom: var(--grid-2);
+}
+
+.definitionExampleExpanded {
+  margin-bottom: var(--grid-2);
+}
+
+.definitionHintExpanded {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-lighter);
+  text-align: center;
+  padding-top: var(--grid-1);
+  border-top: 1px dashed rgba(0, 0, 0, 0.1);
+  opacity: 0.6;
+  font-style: italic;
+  margin-top: var(--grid-2);
+}
+
+/* Modal styling */
+.definitionModal {
+  --height: 75%;
+  --border-radius: 16px 16px 0 0;
+  --box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.modalContent {
+  --padding-start: var(--grid-2);
+  --padding-end: var(--grid-2);
+  --padding-top: 0;
+  --padding-bottom: calc(var(--grid-2) + env(safe-area-inset-bottom, 0));
+}
+
+/* Dark mode adjustments */
+@media (prefers-color-scheme: dark) {
+  .definitionCardCompact {
+    background: #2d2d2d;
+    border-color: rgba(255, 255, 255, 0.08);
   }
   
-  .practiceSection {
-    margin: var(--spacing-lg) 0;
+  .definitionPinyinCompact {
+    background: rgba(76, 175, 80, 0.15);
   }
-}
-
-/* iOS specific */
-.ios .footerSection {
-  padding-bottom: calc(var(--spacing-md) + 20px);
-}
-
-/* Android specific */
-.md .characterSection {
-  cursor: default;
+  
+  .definitionHintCompact {
+    border-color: rgba(255, 255, 255, 0.1);
+  }
 }

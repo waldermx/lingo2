@@ -1,3 +1,4 @@
+// src/components/FlashcardHeader/FlashcardHeader.tsx - VERSIÓN SIMPLIFICADA
 import React from 'react';
 import { 
   IonHeader, 
@@ -22,7 +23,7 @@ const FlashcardHeader: React.FC<FlashcardHeaderProps> = ({
   progress = 0
 }) => {
   return (
-    <IonHeader className={`ion-no-border ${styles.header}`}>
+    <IonHeader className={styles.header}>
       <IonToolbar>
         <IonButtons slot="start">
           <IonButton 
@@ -35,10 +36,10 @@ const FlashcardHeader: React.FC<FlashcardHeaderProps> = ({
           </IonButton>
         </IonButtons>
         
-        <div className={styles.titleContainer}>
+        <IonTitle className={styles.title}>
           <IonIcon icon={book} className={styles.moduleIcon} />
-          <IonTitle className={styles.title}>{moduleName}</IonTitle>
-        </div>
+          {moduleName}
+        </IonTitle>
         
         {progress > 0 && (
           <div className={styles.progressContainer} slot="end">

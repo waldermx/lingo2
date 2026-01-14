@@ -1,7 +1,7 @@
-/* src/components/FlashcardHeader/FlashcardHeader.module.css */
+/* src/components/FlashcardHeader/FlashcardHeader.module.css - SIN CAMBIOS */
 .header {
   background: var(--color-surface);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
 }
 
 .backButton {
@@ -9,41 +9,33 @@
   margin-left: 4px;
 }
 
-.titleContainer {
+.title {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: var(--spacing-sm);
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
+  gap: var(--grid-1);
+  padding: 0;
+  text-align: center;
 }
 
 .moduleIcon {
   color: var(--color-primary);
-  font-size: 24px;
-}
-
-.title {
-  font-weight: 600;
-  color: var(--color-text);
-  margin: 0;
-  padding: 0;
-  text-align: center;
+  font-size: 20px;
 }
 
 .progressContainer {
   display: flex;
   align-items: center;
-  margin-right: var(--spacing-sm);
+  justify-content: center;
+  margin-right: var(--grid-1);
 }
 
 .progressText {
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
   color: var(--color-primary);
   background: rgba(46, 125, 50, 0.1);
-  padding: 4px 8px;
+  padding: 4px 10px;
   border-radius: 12px;
   min-width: 40px;
   text-align: center;
@@ -56,6 +48,11 @@
   }
   
   .title {
-    font-size: 16px;
+    font-size: 15px;
+  }
+  
+  .progressText {
+    font-size: 12px;
+    padding: 3px 8px;
   }
 }
