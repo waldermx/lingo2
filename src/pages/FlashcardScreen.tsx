@@ -28,8 +28,8 @@ const SAMPLE_CHARACTERS = [
     id: '1',
     character: '爱',
     pinyin: 'ài',
-    definition: 'love, affection, to be fond of, to like',
-    example: '我爱你 (wǒ ài nǐ) - I love you',
+    definition: 'amor, afecto, tener cariño, gustar',
+    example: '我爱你 (wǒ ài nǐ) - Te amo',
     difficulty: 'medium' as const,
     correctCount: 5
   },
@@ -37,12 +37,13 @@ const SAMPLE_CHARACTERS = [
     id: '2',
     character: '学',
     pinyin: 'xué',
-    definition: 'to study, to learn, school',
-    example: '学生 (xuéshēng) - student',
+    definition: 'estudiar, aprender, escuela',
+    example: '学生 (xuéshēng) - estudiante',
     difficulty: 'easy' as const,
     correctCount: 8
   }
 ];
+
 
 const FlashcardScreen: React.FC = () => {
   const router = useIonRouter();
@@ -182,7 +183,7 @@ const toggleDefinition = () => {
                 </div>
               )}
               <div className={styles.definitionHintCompact}>
-                Tap to expand
+                Toca para expandir
               </div>
             </div>
           </div>
@@ -200,7 +201,7 @@ const toggleDefinition = () => {
       >
         <IonHeader>
           <IonToolbar>
-            <IonTitle>Character Details</IonTitle>
+            <IonTitle>Definición</IonTitle>
             <IonButtons slot="end">
               <IonButton onClick={() => setIsDefinitionExpanded(false)}>
                 <IonIcon icon={close} slot="icon-only" />
@@ -235,9 +236,6 @@ const toggleDefinition = () => {
               </div>
             )}
             
-            <div className={styles.definitionHintExpanded}>
-              Long press character for advanced details
-            </div>
           </div>
         </IonContent>
       </IonModal>

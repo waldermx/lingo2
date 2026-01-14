@@ -1,4 +1,4 @@
-// src/pages/tabs/PracticeTab.tsx
+// src/pages/tabs/PracticeOverviewScreen.tsx - REEMPLAZA PracticeTab.tsx
 import React from 'react';
 import { 
   IonContent, 
@@ -6,17 +6,20 @@ import {
   IonHeader, 
   IonToolbar, 
   IonTitle, 
+  IonButtons,
   IonButton,
+  IonIcon,
   IonCard,
   IonCardContent,
   IonGrid,
   IonRow,
   IonCol
 } from '@ionic/react';
+
 import { useHistory } from 'react-router-dom';
 import './TabStyles.css';
 
-const PracticeTab: React.FC = () => {
+const PracticeOverviewScreen: React.FC = () => {
   const history = useHistory();
 
   const handleStartPractice = () => {
@@ -25,13 +28,13 @@ const PracticeTab: React.FC = () => {
 
   return (
     <IonPage>
-      <IonHeader className="tab-header">
+      <IonHeader>
         <IonToolbar>
-          <IonTitle>Practice</IonTitle>
+          <IonTitle>Práctica</IonTitle>
         </IonToolbar>
       </IonHeader>
       
-      <IonContent className="tab-content">
+      <IonContent>
         <div className="tab-container">
           {/* Botón principal */}
           <div className="practice-button-container">
@@ -41,30 +44,30 @@ const PracticeTab: React.FC = () => {
               onClick={handleStartPractice}
               size="large"
             >
-              Start Practice
+              ¡Inicia a practicar!
             </IonButton>
           </div>
 
           {/* Resumen ficticio */}
           <IonCard className="progress-summary-card">
             <IonCardContent>
-              <h3 className="summary-title">Today's Progress</h3>
+              <h3 className="summary-title">Progreso de hoy</h3>
               
               <IonGrid>
                 <IonRow>
                   <IonCol>
                     <div className="stat-item">
                       <div className="stat-value">12</div>
-                      <div className="stat-label">Characters</div>
-                      <div className="stat-subtext">studied today</div>
+                      <div className="stat-label">Caracteres</div>
+                      <div className="stat-subtext">estudiados hoy</div>
                     </div>
                   </IonCol>
                   
                   <IonCol>
                     <div className="stat-item">
                       <div className="stat-value">25m</div>
-                      <div className="stat-label">Study Time</div>
-                      <div className="stat-subtext">total today</div>
+                      <div className="stat-label">Tiempo de estudio</div>
+                      <div className="stat-subtext">total hoy</div>
                     </div>
                   </IonCol>
                 </IonRow>
@@ -73,16 +76,16 @@ const PracticeTab: React.FC = () => {
                   <IonCol>
                     <div className="stat-item">
                       <div className="stat-value">92%</div>
-                      <div className="stat-label">Accuracy</div>
-                      <div className="stat-subtext">average today</div>
+                      <div className="stat-label">Precisión</div>
+                      <div className="stat-subtext">promedio hoy</div>
                     </div>
                   </IonCol>
                   
                   <IonCol>
                     <div className="stat-item">
                       <div className="stat-value">HSK 1</div>
-                      <div className="stat-label">Current Level</div>
-                      <div className="stat-subtext">15/150 characters</div>
+                      <div className="stat-label">Nivel actual</div>
+                      <div className="stat-subtext">15/150 caracteres</div>
                     </div>
                   </IonCol>
                 </IonRow>
@@ -95,4 +98,4 @@ const PracticeTab: React.FC = () => {
   );
 };
 
-export default PracticeTab;
+export default PracticeOverviewScreen;

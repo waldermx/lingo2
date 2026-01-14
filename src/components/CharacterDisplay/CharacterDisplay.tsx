@@ -24,7 +24,7 @@ const CharacterDisplay: React.FC<CharacterDisplayProps> = ({
       )}
       {!showPinyin && (
         <div className={styles.pinyinPlaceholder}>
-          Tap to reveal pronunciation
+          Ver pronunciación
         </div>
       )}
     </div>

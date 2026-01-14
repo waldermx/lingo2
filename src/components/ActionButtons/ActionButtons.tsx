@@ -39,7 +39,7 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
                 slot="start" 
                 className={styles.buttonIcon}
               />
-              Correct
+              Correcto
               <IonRippleEffect />
             </IonButton>
           </IonCol>
@@ -58,7 +58,7 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
                 slot="start" 
                 className={styles.buttonIcon}
               />
-              Repeat
+              Repetir
               <IonRippleEffect />
             </IonButton>
           </IonCol>

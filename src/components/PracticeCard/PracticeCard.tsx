@@ -231,10 +231,6 @@ const PracticeCard: React.FC<PracticeCardProps> = ({
           <div className={styles.centerDot} />
         </div>
 
-        {/* Instrucción */}
-        <div className={styles.instruction}>
-          {isDrawing ? 'Drawing...' : 'Trace the character'}
-        </div>
       </div>
     </div>
   );

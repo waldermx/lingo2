@@ -3,9 +3,9 @@ import React from 'react';
 import { IonTabs, IonTabBar, IonTabButton, IonIcon, IonLabel, IonRouterOutlet } from '@ionic/react';
 import { statsChart, book, settings } from 'ionicons/icons';
 import { Route, Redirect } from 'react-router-dom';
-import ProgressTab from './tabs/ProgressTab';
-import PracticeTab from './tabs/PracticeTab';
-import SettingsTab from './tabs/SettingsTab';
+import ProgressTab from './tabs/ProgressScreen.tsx';
+import PracticeTab from './tabs/PracticeOverviewScreen.js';
+import SettingsTab from './tabs/SettingsScreen.js';
 import './Tabs.css';
 
 const Tabs: React.FC = () => {
@@ -29,17 +29,17 @@ const Tabs: React.FC = () => {
       <IonTabBar slot="bottom" className="tab-bar">
         <IonTabButton tab="progress" href="/tabs/progress">
           <IonIcon icon={statsChart} />
-          <IonLabel>Progress</IonLabel>
+          <IonLabel>Progreso</IonLabel>
         </IonTabButton>
         
         <IonTabButton tab="practice" href="/tabs/practice">
           <IonIcon icon={book} />
-          <IonLabel>Practice</IonLabel>
+          <IonLabel>Práctica</IonLabel>
         </IonTabButton>
         
         <IonTabButton tab="settings" href="/tabs/settings">
           <IonIcon icon={settings} />
-          <IonLabel>Settings</IonLabel>
+          <IonLabel>Ajustes</IonLabel>
         </IonTabButton>
       </IonTabBar>
     </IonTabs>
