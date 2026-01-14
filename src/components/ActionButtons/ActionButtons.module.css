@@ -1,0 +1,105 @@
+/* src/components/ActionButtons/ActionButtons.module.css */
+.container {
+  width: 100%;
+  margin-top: var(--spacing-xl);
+}
+
+.grid {
+  --ion-grid-padding: 0;
+  --ion-grid-column-padding: var(--spacing-sm);
+}
+
+.row {
+  margin: 0;
+}
+
+.col {
+  padding: var(--spacing-xs);
+}
+
+.button {
+  height: 56px;
+  font-weight: 600;
+  font-size: var(--font-size-md);
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-md);
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+  margin: 0;
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+.button:active {
+  transform: translateY(2px);
+  box-shadow: var(--shadow-sm);
+}
+
+.button:disabled {
+  opacity: 0.6;
+  transform: none;
+  box-shadow: none;
+}
+
+.correctButton {
+  --background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
+  --background-activated: var(--color-primary);
+  --color: white;
+}
+
+.repeatButton {
+  --background: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-secondary-light) 100%);
+  --background-activated: var(--color-secondary);
+  --color: white;
+}
+
+.buttonIcon {
+  font-size: 24px;
+  margin-right: var(--spacing-xs);
+}
+
+/* Ripple effect enhancement */
+.button ion-ripple-effect {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* Hover effect for desktop */
+@media (hover: hover) and (pointer: fine) {
+  .button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  .button:active {
+    transform: translateY(0);
+  }
+}
+
+/* Small screen adjustments */
+@media (max-width: 320px) {
+  .button {
+    height: 48px;
+    font-size: var(--font-size-sm);
+  }
+  
+  .buttonIcon {
+    font-size: 20px;
+    margin-right: 4px;
+  }
+}
+
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+  .button {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  }
+  
+  .correctButton {
+    --background: linear-gradient(135deg, #2E7D32 0%, #4CAF50 100%);
+  }
+  
+  .repeatButton {
+    --background: linear-gradient(135deg, #FF9800 0%, #FFB74D 100%);
+  }
+}

@@ -1,0 +1,61 @@
+/* src/components/FlashcardHeader/FlashcardHeader.module.css */
+.header {
+  background: var(--color-surface);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.backButton {
+  color: var(--color-primary);
+  margin-left: 4px;
+}
+
+.titleContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.moduleIcon {
+  color: var(--color-primary);
+  font-size: 24px;
+}
+
+.title {
+  font-weight: 600;
+  color: var(--color-text);
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+
+.progressContainer {
+  display: flex;
+  align-items: center;
+  margin-right: var(--spacing-sm);
+}
+
+.progressText {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-primary);
+  background: rgba(46, 125, 50, 0.1);
+  padding: 4px 8px;
+  border-radius: 12px;
+  min-width: 40px;
+  text-align: center;
+}
+
+/* Responsive */
+@media (max-width: 320px) {
+  .moduleIcon {
+    display: none;
+  }
+  
+  .title {
+    font-size: 16px;
+  }
+}

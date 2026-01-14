@@ -1,0 +1,148 @@
+/* src/components/DefinitionFooter/DefinitionFooter.module.css */
+.footer {
+  width: 100%;
+  padding: var(--spacing-md) 0;
+}
+
+.card {
+  background: var(--color-surface);
+  border-radius: var(--border-radius-md);
+  padding: var(--spacing-md);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  margin-bottom: var(--spacing-md);
+  padding-bottom: var(--spacing-sm);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.characterSmall {
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  color: var(--color-text);
+  margin-right: var(--spacing-sm);
+  font-family: 'Noto Sans SC', sans-serif;
+}
+
+.pinyinSmall {
+  font-size: var(--font-size-md);
+  color: var(--color-primary);
+  font-weight: 500;
+  background: rgba(46, 125, 50, 0.1);
+  padding: 2px 8px;
+  border-radius: 12px;
+}
+
+.definition {
+  font-size: var(--font-size-md);
+  color: var(--color-text);
+  line-height: 1.6;
+  margin-bottom: var(--spacing-md);
+}
+
+.example {
+  background: rgba(0, 0, 0, 0.02);
+  padding: var(--spacing-sm);
+  border-radius: var(--border-radius-sm);
+  margin-bottom: var(--spacing-md);
+  border-left: 3px solid var(--color-primary);
+}
+
+.exampleLabel {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-text-light);
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.exampleText {
+  font-size: var(--font-size-md);
+  color: var(--color-text);
+  font-style: italic;
+  line-height: 1.5;
+}
+
+.hint {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-lighter);
+  text-align: center;
+  padding-top: var(--spacing-sm);
+  border-top: 1px dashed rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+/* Animation for card appearance */
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.card {
+  animation: slideUp 0.4s ease-out;
+}
+
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+  .card {
+    background: #2d2d2d;
+    border-color: rgba(255, 255, 255, 0.05);
+  }
+  
+  .header {
+    border-color: rgba(255, 255, 255, 0.05);
+  }
+  
+  .characterSmall {
+    color: #ffffff;
+  }
+  
+  .pinyinSmall {
+    color: #4CAF50;
+    background: rgba(76, 175, 80, 0.1);
+  }
+  
+  .definition {
+    color: #cccccc;
+  }
+  
+  .example {
+    background: rgba(255, 255, 255, 0.03);
+    border-left-color: #4CAF50;
+  }
+  
+  .exampleLabel {
+    color: #aaaaaa;
+  }
+  
+  .exampleText {
+    color: #cccccc;
+  }
+  
+  .hint {
+    color: #888888;
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+}
+
+/* Tablet and larger screens */
+@media (min-width: 768px) {
+  .card {
+    max-width: 500px;
+    margin: 0 auto;
+  }
+}
