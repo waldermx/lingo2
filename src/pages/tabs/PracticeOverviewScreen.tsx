@@ -1,4 +1,4 @@
-// src/pages/tabs/PracticeOverviewScreen.tsx - REEMPLAZA PracticeTab.tsx
+// src/pages/tabs/PracticeOverviewScreen.tsx
 import React from 'react';
 import { 
   IonContent, 
@@ -22,8 +22,12 @@ import './TabStyles.css';
 const PracticeOverviewScreen: React.FC = () => {
   const history = useHistory();
 
-  const handleStartPractice = () => {
-    history.push('/practice');
+  const handleLearnNew = () => {
+    history.push('/learn');
+  };
+
+  const handlePractice = () => {
+    history.push('/quiz');
   };
 
   return (
@@ -36,15 +40,25 @@ const PracticeOverviewScreen: React.FC = () => {
       
       <IonContent>
         <div className="tab-container">
-          {/* Botón principal */}
+          {/* Dos botones principales */}
           <div className="practice-button-container">
             <IonButton 
               expand="block" 
               className="start-practice-button"
-              onClick={handleStartPractice}
+              onClick={handleLearnNew}
               size="large"
+              style={{ marginBottom: '16px' }}
             >
-              ¡Inicia a practicar!
+              Aprender nuevo
+            </IonButton>
+            <IonButton 
+              expand="block" 
+              className="start-practice-button"
+              onClick={handlePractice}
+              size="large"
+              fill="outline"
+            >
+              Práctica
             </IonButton>
           </div>
 
@@ -66,7 +80,7 @@ const PracticeOverviewScreen: React.FC = () => {
                   <IonCol>
                     <div className="stat-item">
                       <div className="stat-value">25m</div>
-                      <div className="stat-label">Tiempo de estudio</div>
+                      <div className="stat-label">Tiempo</div>
                       <div className="stat-subtext">total hoy</div>
                     </div>
                   </IonCol>

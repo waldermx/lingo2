@@ -1,0 +1,61 @@
+/* src/pages/PracticeQuizScreen.css */
+.quiz-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+.character-meaning {
+  text-align: center;
+  margin-bottom: 24px;
+  font-size: 18px;
+  color: var(--color-text);
+  line-height: 1.5;
+}
+
+.writing-area {
+  margin: 24px 0;
+}
+
+.hanzi-writer-container {
+  border-radius: var(--border-radius-lg);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  background: var(--color-surface);
+}
+
+.hint-section {
+  margin-top: 16px;
+  padding: 12px 20px;
+  background: rgba(46, 125, 50, 0.1);
+  border-radius: var(--border-radius-md);
+  text-align: center;
+}
+
+.hint-text {
+  font-size: 16px;
+  color: var(--color-text);
+}
+
+.progress-indicator {
+  margin-top: 24px;
+  font-size: 14px;
+  color: var(--color-text-light);
+  text-align: center;
+}
+
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+  .hanzi-writer-container {
+    background: #2d2d2d;
+  }
+  
+  .hint-section {
+    background: rgba(76, 175, 80, 0.1);
+  }
+}

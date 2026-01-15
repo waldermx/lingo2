@@ -6,6 +6,8 @@ import {
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import FlashcardScreen from './pages/FlashcardScreen';
+import PracticeQuizScreen from './pages/PracticeQuizScreen';
+
 import Tabs from './pages/Tabs';
 
 /* Core CSS required for Ionic components to work properly */
@@ -37,6 +39,8 @@ import '@ionic/react/css/palettes/dark.system.css';
 
 /* Theme variables */
 import './theme/variables.css';
+import PracticeResultsScreen from './pages/PracticeResultsScreen';
+
 
 setupIonicReact();
 
@@ -47,10 +51,23 @@ const App: React.FC = () => (
         {/* Ruta principal con tabs */}
         <Route path="/tabs" component={Tabs} />
         
-        {/* Pantalla de práctica - SIN tabs */}
-        <Route exact path="/practice">
+        <Route exact path="/learn">
           <FlashcardScreen />
         </Route>
+        
+        {/* Pantalla de práctica (quiz) */}
+        <Route exact path="/quiz">
+          <PracticeQuizScreen />
+        </Route>
+
+         <Route exact path="/practice-results">
+          <PracticeResultsScreen />
+        </Route>
+
+        <Route exact path="/congratulations">
+          <PracticeResultsScreen />
+        </Route>
+        
         
         {/* Redirección por defecto */}
         <Route exact path="/">

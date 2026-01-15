@@ -64,9 +64,8 @@ const FlashcardScreen: React.FC = () => {
   }, [currentIndex]);
 
   const handleBack = () => {
-    if (router.canGoBack()) {
-      router.goBack();
-    }
+    router.push('/tabs/practice');
+
   };
 
   const handleCorrect = () => {
@@ -118,7 +117,7 @@ const toggleDefinition = () => {
 
       <IonContent 
         className={`ion-padding ${styles.content}`}
-        scrollY={false} // Sin scroll en vista principal
+        scrollY={true} // Sin scroll en vista principal
         forceOverscroll={false}
       >
         <div className={styles.mainContainer}>

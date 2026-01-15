@@ -1,0 +1,90 @@
+/* src/pages/PracticeResultsScreen.css */
+.results-container {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+.results-card {
+  background: var(--color-surface);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-md);
+}
+
+.results-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.results-icon {
+  font-size: 64px;
+  margin-bottom: 16px;
+}
+
+.results-header h2 {
+  color: var(--color-text);
+  margin-bottom: 8px;
+  font-size: 24px;
+}
+
+.results-header p {
+  color: var(--color-text-light);
+  margin: 0;
+}
+
+.results-stats {
+  margin: 32px 0;
+}
+
+.stat-box {
+  text-align: center;
+  padding: 16px;
+}
+
+.stat-number {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--color-primary);
+  margin-bottom: 4px;
+}
+
+.stat-label {
+  font-size: 14px;
+  color: var(--color-text-light);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.results-message {
+  text-align: center;
+  margin: 32px 0;
+  padding: 16px;
+  background: rgba(0, 0, 0, 0.02);
+  border-radius: var(--border-radius-md);
+}
+
+.results-message p {
+  color: var(--color-text);
+  font-size: 16px;
+  margin: 0;
+  font-style: italic;
+}
+
+.results-actions {
+  margin-top: 32px;
+}
+
+.action-button {
+  margin-bottom: 12px;
+}
+
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+  .results-card {
+    background: #2d2d2d;
+  }
+  
+  .results-message {
+    background: rgba(255, 255, 255, 0.03);
+  }
+}

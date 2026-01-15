@@ -1,0 +1,92 @@
+[
+  {
+    "id": "1",
+    "character": "爱",
+    "pinyin": "ài",
+    "definition": "amor, afecto, tener cariño, gustar",
+    "example": "我爱你 (wǒ ài nǐ) - Te amo",
+    "difficulty": "medium",
+    "correctCount": 5
+  },
+  {
+    "id": "2",
+    "character": "学",
+    "pinyin": "xué",
+    "definition": "estudiar, aprender, escuela",
+    "example": "学生 (xuéshēng) - estudiante",
+    "difficulty": "easy",
+    "correctCount": 8
+  },
+  {
+    "id": "3",
+    "character": "好",
+    "pinyin": "hǎo",
+    "definition": "bueno, bien, querer, gustar",
+    "example": "你好 (nǐ hǎo) - Hola",
+    "difficulty": "easy",
+    "correctCount": 10
+  },
+  {
+    "id": "4",
+    "character": "人",
+    "pinyin": "rén",
+    "definition": "persona, gente",
+    "example": "大人 (dà rén) - adulto",
+    "difficulty": "easy",
+    "correctCount": 15
+  },
+  {
+    "id": "5",
+    "character": "大",
+    "pinyin": "dà",
+    "definition": "grande, enorme, importante",
+    "example": "大家 (dà jiā) - todos",
+    "difficulty": "easy",
+    "correctCount": 12
+  },
+  {
+    "id": "6",
+    "character": "中",
+    "pinyin": "zhōng",
+    "definition": "centro, medio, China",
+    "example": "中国 (zhōng guó) - China",
+    "difficulty": "medium",
+    "correctCount": 7
+  },
+  {
+    "id": "7",
+    "character": "国",
+    "pinyin": "guó",
+    "definition": "país, nación",
+    "example": "国家 (guó jiā) - país",
+    "difficulty": "medium",
+    "correctCount": 6
+  },
+  {
+    "id": "8",
+    "character": "我",
+    "pinyin": "wǒ",
+    "definition": "yo, mi",
+    "example": "我们 (wǒ men) - nosotros",
+    "difficulty": "easy",
+    "correctCount": 20
+  },
+  {
+    "id": "9",
+    "character": "你",
+    "pinyin": "nǐ",
+    "definition": "tú, usted",
+    "example": "你们 (nǐ men) - ustedes",
+    "difficulty": "easy",
+    "correctCount": 18
+  },
+  {
+    "id": "10",
+    "character": "们",
+    "pinyin": "men",
+    "definition": "sufijo plural para pronombres y algunos sustantivos",
+    "example": "我们 (wǒ men) - nosotros",
+    "difficulty": "medium",
+    "correctCount": 5
+  }
+]

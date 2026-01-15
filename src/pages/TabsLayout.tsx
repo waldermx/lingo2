@@ -14,14 +14,14 @@ const TabsLayout: React.FC = () => {
         <Route exact path="/tabs/progress">
           <ProgressScreen />
         </Route>
-        <Route exact path="/tabs/practice-overview">
+        <Route exact path="/tabs/practice">
           <PracticeOverviewScreen />
         </Route>
         <Route exact path="/tabs/settings">
           <SettingsScreen />
         </Route>
         <Route exact path="/tabs">
-          <Redirect to="/tabs/practice-overview" />
+          <Redirect to="/tabs/practice" />
         </Route>
       </IonRouterOutlet>
 
