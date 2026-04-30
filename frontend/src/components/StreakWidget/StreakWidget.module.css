@@ -1,0 +1,53 @@
+.wrapper {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+.compact {
+  gap: var(--sp-1);
+}
+
+.fire {
+  font-size: 28px;
+  line-height: 1;
+  display: inline-block;
+}
+
+.compact .fire {
+  font-size: 20px;
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+}
+
+.count {
+  font-family: var(--font-family);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--c-amber);
+  line-height: 1.1;
+}
+
+.compact .count {
+  font-size: var(--font-size-lg);
+}
+
+.label {
+  font-family: var(--font-family);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--c-text-secondary);
+  line-height: 1;
+}
+
+.best {
+  font-family: var(--font-family);
+  font-size: var(--font-size-xs);
+  color: var(--c-text-tertiary);
+  margin-left: var(--sp-1);
+  align-self: flex-end;
+  margin-bottom: 2px;
+}

@@ -1,17 +1,16 @@
-// src/pages/PracticeQuizScreen.tsx
-import React, { useState, useEffect, useRef } from 'react';
+// src/pages/PracticeQuizScreen.tsx — Redesigned
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import {
   IonContent,
   IonPage,
   IonHeader,
   IonToolbar,
-  IonTitle,
   IonButtons,
   IonButton,
   IonIcon,
-  IonLoading
 } from '@ionic/react';
-import { arrowBack, helpCircle } from 'ionicons/icons';
+import { arrowBack } from 'ionicons/icons';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useHistory } from 'react-router-dom';
 import HanziWriter, { HanziWriterInstance } from 'hanzi-writer';
 import charactersData from '../data/characters.json';
@@ -27,28 +26,126 @@ interface Character {
   correctCount: number;
 }
 
+type InputMode = 'draw' | 'choice';
+
+function buildChoices(chars: Character[], correctIdx: number): string[] {
+  const correct = chars[correctIdx].pinyin;
+  const pool = chars.filter((_, i) => i !== correctIdx).map((c) => c.pinyin);
+  const distractors = pool.sort(() => Math.random() - 0.5).slice(0, 3);
+  const all = [...distractors, correct].sort(() => Math.random() - 0.5);
+  return all;
+}
+
 const PracticeQuizScreen: React.FC = () => {
   const history = useHistory();
   const writerRef = useRef<HanziWriterInstance | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  const [inputMode, setInputMode] = useState<InputMode | null>(null); // null = selection screen
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showHint, setShowHint] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
   const [results, setResults] = useState<boolean[]>([]);
+  const [choices, setChoices] = useState<string[]>([]);
+  const [choiceResult, setChoiceResult] = useState<'correct' | 'wrong' | null>(null);
 
   const characters: Character[] = charactersData;
   const currentCharacter = characters[currentIndex];
 
+  const advanceNext = useCallback((correct: boolean) => {
+    const newResults = [...results, correct];
+    setResults(newResults);
+    setTimeout(() => {
+      if (currentIndex < characters.length - 1) {
+        setCurrentIndex((i) => i + 1);
+        setShowHint(false);
+        setChoiceResult(null);
+        setChoices(inputMode === 'choice' ? buildChoices(characters, currentIndex + 1) : []);
+      } else {
+        history.push('/practice-results', { results: newResults });
+      }
+    }, 700);
+  }, [results, currentIndex, characters, history, inputMode]);
+
+  // Init choices when mode=choice
   useEffect(() => {
-    if (!containerRef.current || !currentCharacter) return;
+    if (inputMode === 'choice') setChoices(buildChoices(characters, currentIndex));
+  }, [inputMode, currentIndex, characters]);
 
-    const initWriter = () => {
-      // Limpiar contenedor
-      const container = containerRef.current;
-      if (!container) return;
+  // Init HanziWriter in draw mode
+  useEffect(() => {
+    if (inputMode !== 'draw' || !containerRef.current || !currentCharacter) return;
+    const container = containerRef.current;
+    while (container.firstChild) container.removeChild(container.firstChild);
 
-      while (container.firstChild) {
-        container.removeChild(container.firstChild);
+    writerRef.current = HanziWriter.create(container, currentCharacter.character, {
+      width: 260,
+      height: 260,
+      padding: 8,
+      showOutline: false,
+      showCharacter: false,
+      outlineColor: 'var(--c-bg-tertiary)',
+      strokeColor: 'var(--c-text)',
+      drawingColor: 'var(--c-blue)',
+      drawingWidth: 40,
+      strokeWidth: 5,
+      showHintAfterMisses: 2,
+      highlightOnComplete: true,
+      highlightColor: 'var(--c-green)',
+      strokeAnimationSpeed: 1.5,
+      delayBetweenStrokes: 400,
+    });
+
+    writerRef.current.quiz({
+      onMistake: () => {},
+      onComplete: () => { advanceNext(true); },
+    });
+
+    return () => { writerRef.current = null; };
+  }, [currentIndex, currentCharacter, inputMode, advanceNext]);
+
+  // Mode selection screen
+  if (!inputMode) {
+    return (
+      <IonPage>
+        <IonHeader>
+          <IonToolbar>
+            <IonButtons slot="start">
+              <IonButton onClick={() => history.goBack()}><IonIcon icon={arrowBack} /></IonButton>
+            </IonButtons>
+          </IonToolbar>
+        </IonHeader>
+        <IonContent>
+          <div className="mode-select-screen">
+            <h2 className="mode-title">Elige el modo</h2>
+            <p className="mode-sub">{characters.length} caracteres · HSK 1</p>
+            <div className="mode-cards">
+              <motion.button className="mode-card draw-card" whileTap={{ scale: 0.95 }}
+                onClick={() => setInputMode('draw')}>
+                <span className="mode-card-emoji">📝</span>
+                <span className="mode-card-title">Dibujar</span>
+                <span className="mode-card-desc">Escribe el carácter correctamente con tu dedo</span>
+              </motion.button>
+              <motion.button className="mode-card choice-card" whileTap={{ scale: 0.95 }}
+                onClick={() => setInputMode('choice')}>
+                <span className="mode-card-emoji">🧠</span>
+                <span className="mode-card-title">Elegir</span>
+                <span className="mode-card-desc">Selecciona el pinyin correcto entre 4 opciones</span>
+              </motion.button>
+            </div>
+          </div>
+        </IonContent>
+      </IonPage>
+    );
+  }
+
+  const handleChoiceSelect = (chosen: string) => {
+    if (choiceResult) return;
+    const correct = chosen === currentCharacter.pinyin;
+    setChoiceResult(correct ? 'correct' : 'wrong');
+    advanceNext(correct);
+  };
+
+  return (
       }
 
       // Crear instancia de Hanzi Writer en modo quiz

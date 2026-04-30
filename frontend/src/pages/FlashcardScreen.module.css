@@ -1,5 +1,258 @@
-/* src/pages/FlashcardScreen.module.css - SOLO LOS CAMBIOS REQUERIDOS */
+/* FlashcardScreen — Apple-style redesign */
+.page {
+  --background: var(--c-bg-secondary);
+}
+
+.header {
+  --background: var(--c-bg);
+  border-bottom: 1px solid var(--c-separator);
+}
+
+.toolbar {
+  --background: var(--c-bg);
+  display: flex;
+  align-items: center;
+}
+
+.progressContainer {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: 0 var(--sp-4) 0 var(--sp-2);
+}
+
+.progressTrack {
+  flex: 1;
+  height: 4px;
+  background: var(--c-bg-tertiary);
+  border-radius: var(--r-full);
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background: var(--c-blue);
+  border-radius: var(--r-full);
+}
+
+.progressLabel {
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--c-text-secondary);
+  white-space: nowrap;
+}
+
 .content {
+  --background: var(--c-bg-secondary);
+}
+
+.scene {
+  height: 100%;
+  min-height: calc(100vh - 56px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--sp-6) var(--sp-6) calc(var(--sp-6) + var(--ion-safe-area-bottom, 0));
+  position: relative;
+  gap: var(--sp-6);
+  user-select: none;
+}
+
+/* Swipe hint badges */
+.hintBadge {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: var(--font-family);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
+  padding: 8px 20px;
+  border-radius: var(--r-full);
+  pointer-events: none;
+  z-index: 10;
+}
+
+.hintLeft {
+  left: var(--sp-4);
+  background: var(--c-amber-bg);
+  color: var(--c-amber);
+}
+
+.hintRight {
+  right: var(--sp-4);
+  background: var(--c-green-bg);
+  color: var(--c-green);
+}
+
+/* XP Toast */
+.xpToast {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--c-green);
+  color: #fff;
+  font-family: var(--font-family);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  padding: 8px 20px;
+  border-radius: var(--r-full);
+  z-index: 20;
+  pointer-events: none;
+  box-shadow: var(--shadow-md);
+}
+
+/* Card */
+.cardWrapper {
+  width: 100%;
+  max-width: 340px;
+  aspect-ratio: 0.72;
+  perspective: 1200px;
+  cursor: grab;
+  flex-shrink: 0;
+}
+
+.cardWrapper:active { cursor: grabbing; }
+
+.cardInner {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.cardFace {
+  position: absolute;
+  inset: 0;
+  background: var(--c-surface);
+  border-radius: var(--r-xl);
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-4);
+  padding: var(--sp-8);
+  backface-visibility: hidden;
+}
+
+.cardFront {
+  /* default face */
+}
+
+.cardBack {
+  transform: rotateY(180deg);
+  justify-content: flex-start;
+  padding-top: var(--sp-8);
+  gap: var(--sp-3);
+}
+
+.hanzi {
+  font-family: var(--font-family);
+  font-size: var(--font-size-hanzi);
+  font-weight: var(--font-weight-heavy);
+  color: var(--c-text);
+  line-height: 1;
+}
+
+.hanziSm {
+  font-family: var(--font-family);
+  font-size: 52px;
+  font-weight: var(--font-weight-heavy);
+  color: var(--c-text);
+  line-height: 1;
+}
+
+.pinyin {
+  font-family: var(--font-family);
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-semibold);
+  line-height: 1;
+}
+
+.definition {
+  font-family: var(--font-family);
+  font-size: var(--font-size-md);
+  color: var(--c-text);
+  margin: 0;
+  text-align: center;
+  line-height: 1.5;
+}
+
+.example {
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  color: var(--c-text-secondary);
+  text-align: center;
+  line-height: 1.4;
+  font-style: italic;
+}
+
+.flipBtn {
+  background: var(--c-bg-secondary);
+  color: var(--c-blue);
+  border: none;
+  border-radius: var(--r-full);
+  padding: 8px 20px;
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+  transition: background var(--t-fast);
+  margin-top: var(--sp-2);
+}
+
+.flipBtn:hover { background: var(--c-bg-tertiary); }
+
+/* Action buttons */
+.actions {
+  display: flex;
+  gap: var(--sp-4);
+  width: 100%;
+  max-width: 340px;
+}
+
+.actionBtn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-1);
+  padding: var(--sp-4);
+  border: none;
+  border-radius: var(--r-lg);
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+  transition: filter var(--t-fast);
+}
+
+.actionBtn ion-icon {
+  font-size: 22px;
+}
+
+.repeatBtn {
+  background: var(--c-amber-bg);
+  color: var(--c-amber);
+}
+
+.correctBtn {
+  background: var(--c-green-bg);
+  color: var(--c-green);
+}
+
+.swipeHint {
+  font-family: var(--font-family);
+  font-size: var(--font-size-xs);
+  color: var(--c-text-tertiary);
+  margin: 0;
+  text-align: center;
+}
+
   --background: transparent;
   display: flex;
   flex-direction: column;

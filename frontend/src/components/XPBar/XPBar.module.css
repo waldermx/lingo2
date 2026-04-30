@@ -1,0 +1,66 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  width: 100%;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.levelBadge {
+  display: flex;
+  align-items: baseline;
+  gap: 3px;
+  background: var(--c-blue);
+  color: #fff;
+  padding: 3px 10px;
+  border-radius: var(--r-full);
+}
+
+.levelLabel {
+  font-family: var(--font-family);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  opacity: 0.85;
+}
+
+.levelNum {
+  font-family: var(--font-family);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
+}
+
+.xpText {
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  color: var(--c-text-secondary);
+}
+
+.track {
+  width: 100%;
+  height: 8px;
+  background: var(--c-bg-tertiary);
+  border-radius: var(--r-full);
+  overflow: hidden;
+}
+
+.fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--c-blue), var(--c-blue-light));
+  border-radius: var(--r-full);
+}
+
+.footer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.totalXP {
+  font-family: var(--font-family);
+  font-size: var(--font-size-xs);
+  color: var(--c-text-tertiary);
+}

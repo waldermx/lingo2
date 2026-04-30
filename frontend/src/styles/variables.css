@@ -1,65 +1,155 @@
-/* src/styles/variables.css - VERSIÓN ACTUALIZADA */
+/* =========================================================
+   src/styles/variables.css — Lingo2 Design System v2
+   Paleta Apple-style: minimalista, blanco/negro + accents vibrantes
+   ========================================================= */
 :root {
-  /* Sistema de grilla basado en 8px */
-  --grid-base: 8px;
-  --grid-1: calc(var(--grid-base) * 1);   /* 8px */
-  --grid-2: calc(var(--grid-base) * 2);   /* 16px */
-  --grid-3: calc(var(--grid-base) * 3);   /* 24px */
-  --grid-4: calc(var(--grid-base) * 4);   /* 32px */
-  --grid-5: calc(var(--grid-base) * 5);   /* 40px */
-  --grid-6: calc(var(--grid-base) * 6);   /* 48px */
-  
-  /* Colores principales - SIN CAMBIOS */
-  --color-primary: #2E7D32;
-  --color-primary-light: #4CAF50;
-  --color-secondary: #FF9800;
-  --color-secondary-light: #FFB74D;
-  --color-background: #F9F9F9;
-  --color-surface: #FFFFFF;
-  --color-text: #333333;
-  --color-text-light: #666666;
-  --color-text-lighter: #888888;
-  
-  /* Espaciados - ahora basados en la grilla */
-  --spacing-xs: var(--grid-1);  /* 8px */
-  --spacing-sm: var(--grid-1);  /* 8px */
-  --spacing-md: var(--grid-2);  /* 16px */
-  --spacing-lg: var(--grid-3);  /* 24px */
-  --spacing-xl: var(--grid-4);  /* 32px */
-  --spacing-xxl: var(--grid-6); /* 48px */
-  
-  /* Bordes - radios consistentes */
-  --border-radius-sm: var(--grid-1);  /* 8px */
-  --border-radius-md: var(--grid-2);  /* 16px */
-  --border-radius-lg: var(--grid-3);  /* 24px */
-  
-  /* Sombras - niveles consistentes */
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
-  --shadow-md: 0 3px 6px rgba(0, 0, 0, 0.12);
-  --shadow-lg: 0 6px 12px rgba(0, 0, 0, 0.15);
-  
-  /* Tipografía - SIN CAMBIOS */
-  --font-size-xs: 12px;
-  --font-size-sm: 14px;
-  --font-size-md: 16px;
-  --font-size-lg: 20px;
-  --font-size-xl: 32px;
-  --font-size-xxl: 64px;
-  
-  /* Safe Areas */
+  /* ---- Typography ---- */
+  --font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-size-xs: 11px;
+  --font-size-sm: 13px;
+  --font-size-md: 15px;
+  --font-size-lg: 17px;
+  --font-size-xl: 22px;
+  --font-size-2xl: 28px;
+  --font-size-3xl: 38px;
+  --font-size-4xl: 56px;
+  --font-size-hanzi: 96px;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-heavy: 800;
+
+  /* ---- Colors — light mode ---- */
+  --c-bg:          #FFFFFF;
+  --c-bg-secondary: #F5F5F7;
+  --c-bg-tertiary: #EBEBF0;
+  --c-surface:     #FFFFFF;
+  --c-surface-raised: #F5F5F7;
+  --c-text:        #1D1D1F;
+  --c-text-secondary: #86868B;
+  --c-text-tertiary: #AEAEB2;
+  --c-separator:   rgba(0,0,0,0.08);
+  --c-overlay:     rgba(0,0,0,0.5);
+
+  /* ---- Accent colors ---- */
+  --c-blue:        #0071E3;
+  --c-blue-light:  #47A8FF;
+  --c-blue-bg:     #EBF3FF;
+  --c-green:       #30D158;
+  --c-green-light: #68E093;
+  --c-green-bg:    #E8F9ED;
+  --c-red:         #FF375F;
+  --c-red-light:   #FF6B87;
+  --c-red-bg:      #FFF0F3;
+  --c-amber:       #FF9F0A;
+  --c-amber-light: #FFB84D;
+  --c-amber-bg:    #FFF8E8;
+  --c-purple:      #BF5AF2;
+  --c-purple-light: #D48EFF;
+  --c-purple-bg:   #F7EEFF;
+  --c-gray:        #8E8E93;
+  --c-gray-light:  #C7C7CC;
+  --c-gray-bg:     #F2F2F7;
+
+  /* ---- Character card state colors ---- */
+  --card-new:         var(--c-gray);        /* Sin estudiar */
+  --card-learning:    var(--c-blue);        /* Aprendiendo */
+  --card-fresh:       var(--c-green);       /* Review: due > 2d */
+  --card-due:         var(--c-amber);       /* Para repasar hoy */
+  --card-overdue:     var(--c-red);         /* Vencido */
+  --card-mastered:    var(--c-purple);      /* Dominado: stability > 30d */
+
+  /* ---- Tone colors (standard Chinese linguistics) ---- */
+  --tone-1: #E5393A;   /* 1st tone: ā — red */
+  --tone-2: #F0892A;   /* 2nd tone: á — orange */
+  --tone-3: #2E9E4F;   /* 3rd tone: ǎ — green */
+  --tone-4: #3F7DC4;   /* 4th tone: à — blue */
+  --tone-5: var(--c-text-secondary); /* neutral tone */
+
+  /* ---- Spacing (4pt base grid) ---- */
+  --sp-1:  4px;
+  --sp-2:  8px;
+  --sp-3:  12px;
+  --sp-4:  16px;
+  --sp-5:  20px;
+  --sp-6:  24px;
+  --sp-8:  32px;
+  --sp-10: 40px;
+  --sp-12: 48px;
+  --sp-16: 64px;
+
+  /* ---- Legacy aliases (for existing components) ---- */
+  --spacing-xs:  var(--sp-2);
+  --spacing-sm:  var(--sp-2);
+  --spacing-md:  var(--sp-4);
+  --spacing-lg:  var(--sp-6);
+  --spacing-xl:  var(--sp-8);
+  --spacing-xxl: var(--sp-12);
+  --color-background:   var(--c-bg);
+  --color-surface:      var(--c-surface);
+  --color-text:         var(--c-text);
+  --color-text-light:   var(--c-text-secondary);
+  --color-text-lighter: var(--c-text-tertiary);
+  --color-primary:      var(--c-blue);
+  --color-primary-light: var(--c-blue-light);
+  --color-secondary:    var(--c-amber);
+  --color-secondary-light: var(--c-amber-light);
+
+  /* ---- Border radii ---- */
+  --r-xs:  6px;
+  --r-sm:  10px;
+  --r-md:  14px;
+  --r-lg:  20px;
+  --r-xl:  28px;
+  --r-full: 9999px;
+  --border-radius-sm: var(--r-sm);
+  --border-radius-md: var(--r-md);
+  --border-radius-lg: var(--r-lg);
+
+  /* ---- Shadows ---- */
+  --shadow-xs: 0 1px 4px rgba(0,0,0,0.05);
+  --shadow-sm: 0 2px 8px rgba(0,0,0,0.08);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.10);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
+  --shadow-xl: 0 16px 48px rgba(0,0,0,0.14);
+
+  /* ---- Transitions ---- */
+  --t-fast:   150ms ease;
+  --t-normal: 250ms ease;
+  --t-slow:   400ms ease;
+  --t-spring: 400ms cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* ---- Safe Areas ---- */
   --ion-safe-area-top: env(safe-area-inset-top, 0);
   --ion-safe-area-bottom: env(safe-area-inset-bottom, 0);
   --ion-safe-area-left: env(safe-area-inset-left, 0);
   --ion-safe-area-right: env(safe-area-inset-right, 0);
 }
 
-/* Modo oscuro - SIN CAMBIOS */
+/* ---- Dark mode ---- */
 @media (prefers-color-scheme: dark) {
   :root {
-    --color-background: #1a1a1a;
-    --color-surface: #2d2d2d;
-    --color-text: #ffffff;
-    --color-text-light: #cccccc;
-    --color-text-lighter: #888888;
+    --c-bg:          #000000;
+    --c-bg-secondary: #1C1C1E;
+    --c-bg-tertiary: #2C2C2E;
+    --c-surface:     #1C1C1E;
+    --c-surface-raised: #2C2C2E;
+    --c-text:        #FFFFFF;
+    --c-text-secondary: #EBEBF5CC;
+    --c-text-tertiary: #EBEBF599;
+    --c-separator:   rgba(255,255,255,0.08);
+    --c-overlay:     rgba(0,0,0,0.7);
+
+    --c-blue-bg:     #001933;
+    --c-green-bg:    #0D2B17;
+    --c-red-bg:      #2B0009;
+    --c-amber-bg:    #2B1C00;
+    --c-purple-bg:   #1B0030;
+    --c-gray-bg:     #1C1C1E;
+
+    --shadow-sm: 0 2px 8px rgba(0,0,0,0.3);
+    --shadow-md: 0 4px 16px rgba(0,0,0,0.4);
+    --shadow-lg: 0 8px 32px rgba(0,0,0,0.5);
   }
 }

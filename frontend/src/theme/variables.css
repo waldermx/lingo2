@@ -1,2 +1,85 @@
-/* For information on how to create your own theme, please refer to:
-http://ionicframework.com/docs/theming/ */
+/* Lingo2 — Ionic Theme Variables (Apple-style overrides) */
+@import '../styles/variables.css';
+
+:root {
+  /* Ionic color system — mapped to our design tokens */
+  --ion-background-color: var(--c-bg);
+  --ion-background-color-rgb: 255,255,255;
+  --ion-text-color: var(--c-text);
+  --ion-text-color-rgb: 29,29,31;
+
+  --ion-color-primary: var(--c-blue);
+  --ion-color-primary-rgb: 0,113,227;
+  --ion-color-primary-contrast: #ffffff;
+  --ion-color-primary-contrast-rgb: 255,255,255;
+  --ion-color-primary-shade: #0060c9;
+  --ion-color-primary-tint: var(--c-blue-light);
+
+  --ion-color-secondary: var(--c-purple);
+  --ion-color-secondary-rgb: 191,90,242;
+  --ion-color-secondary-contrast: #ffffff;
+  --ion-color-secondary-shade: #a84bd4;
+  --ion-color-secondary-tint: var(--c-purple-light);
+
+  --ion-color-success: var(--c-green);
+  --ion-color-success-rgb: 48,209,88;
+  --ion-color-success-contrast: #000000;
+  --ion-color-success-shade: #29b84c;
+  --ion-color-success-tint: var(--c-green-light);
+
+  --ion-color-warning: var(--c-amber);
+  --ion-color-warning-rgb: 255,159,10;
+  --ion-color-warning-contrast: #000000;
+  --ion-color-warning-shade: #e08c09;
+  --ion-color-warning-tint: var(--c-amber-light);
+
+  --ion-color-danger: var(--c-red);
+  --ion-color-danger-rgb: 255,55,95;
+  --ion-color-danger-contrast: #ffffff;
+  --ion-color-danger-shade: #e02d50;
+  --ion-color-danger-tint: var(--c-red-light);
+
+  --ion-color-medium: var(--c-gray);
+  --ion-color-medium-rgb: 142,142,147;
+  --ion-color-medium-contrast: #ffffff;
+  --ion-color-medium-shade: #7c7c81;
+  --ion-color-medium-tint: var(--c-gray-light);
+
+  --ion-color-light: var(--c-bg-secondary);
+  --ion-color-light-rgb: 245,245,247;
+  --ion-color-light-contrast: var(--c-text);
+  --ion-color-light-shade: #d9d9db;
+  --ion-color-light-tint: #f9f9fb;
+
+  /* Toolbar / Header */
+  --ion-toolbar-background: var(--c-bg);
+  --ion-toolbar-color: var(--c-text);
+  --ion-toolbar-border-color: var(--c-separator);
+
+  /* Tab bar */
+  --ion-tab-bar-background: var(--c-bg);
+  --ion-tab-bar-border-color: var(--c-separator);
+  --ion-tab-bar-color: var(--c-text-secondary);
+  --ion-tab-bar-color-selected: var(--c-blue);
+
+  /* Cards & items */
+  --ion-card-background: var(--c-surface);
+  --ion-item-background: var(--c-surface);
+  --ion-border-color: var(--c-separator);
+
+  /* Font */
+  --ion-font-family: var(--font-family);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ion-background-color: var(--c-bg);
+    --ion-background-color-rgb: 0,0,0;
+    --ion-text-color: var(--c-text);
+    --ion-text-color-rgb: 255,255,255;
+    --ion-toolbar-background: var(--c-bg);
+    --ion-card-background: var(--c-surface);
+    --ion-item-background: var(--c-surface);
+    --ion-tab-bar-background: var(--c-bg);
+  }
+}
