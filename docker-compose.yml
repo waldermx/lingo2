@@ -52,8 +52,8 @@ services:
   # ── Fastify API ──────────────────────────────────────────────────────────────
   api:
     build:
-      context: ./backend
-      dockerfile: Dockerfile.dev
+      context: .
+      dockerfile: ./backend/Dockerfile.dev
     restart: unless-stopped
     env_file: ./backend/.env
     environment:
@@ -62,7 +62,8 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - ./backend:/app
+      - ./backend:/app/backend
+      - ./shared:/app/shared
       - /app/node_modules
     depends_on:
       postgres:

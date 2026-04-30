@@ -1,5 +1,6 @@
 # ─────────────────────────────────────────────────────────────────────────────
 # Lingo2 Backend — Production Dockerfile
+# Build context: monorepo root  (docker build -f backend/Dockerfile .)
 # Multi-stage build: builder (compile) → runner (minimal Alpine image)
 # ─────────────────────────────────────────────────────────────────────────────
 
@@ -10,14 +11,30 @@ RUN corepack enable pnpm
 
 WORKDIR /app
 
-# Install dependencies first (cache layer)
-COPY package.json pnpm-lock.yaml* ./
+# Install all workspace deps using the root lockfile (cache layer).
+# Copying only manifests first maximises layer cache hits.
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY backend/package.json  ./backend/
+COPY frontend/package.json ./frontend/
+COPY shared/package.json   ./shared/
+# postinstall runs `prisma generate`, producing the Alpine-native binary.
 RUN pnpm install --frozen-lockfile
 
 # Copy source and build
-COPY . .
-RUN pnpm db:generate
+COPY backend/ ./backend/
+COPY shared/  ./shared/
+
+WORKDIR /app/backend
 RUN pnpm build
+
+# Produce a minimal standalone deployment dir (prod deps only, no devDeps).
+# --ignore-scripts skips postinstall in the new dir; we copy the already-
+# generated Prisma binary from the builder's node_modules manually below.
+WORKDIR /app
+RUN pnpm --filter @lingo2/backend deploy --prod --ignore-scripts /standalone
+
+# Copy the Alpine-native Prisma engine generated during `pnpm install` above.
+RUN cp -r /app/node_modules/.prisma /standalone/node_modules/.prisma
 
 # ── Stage 2: Runner ──────────────────────────────────────────────────────────
 FROM node:22-alpine AS runner
@@ -28,13 +45,8 @@ RUN addgroup --system --gid 1001 nodejs \
 
 WORKDIR /app
 
-# Copy only the built output and production dependencies
-COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/prisma/schema.prisma ./prisma/schema.prisma
-
-# Prisma client needs the schema
-RUN npm install -g @prisma/client 2>/dev/null || true
+# Copy the fully self-contained standalone bundle.
+COPY --from=builder /standalone ./
 
 USER fastify
 
