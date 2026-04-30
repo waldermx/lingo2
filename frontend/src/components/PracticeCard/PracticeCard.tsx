@@ -1,6 +1,6 @@
 // src/components/PracticeCard/PracticeCard.tsx - VERSIÓN CORREGIDA
 import React, { useRef, useEffect, useState } from 'react';
-import HanziWriter from 'hanzi-writer';
+import HanziWriter, { HanziWriterInstance } from 'hanzi-writer';
 import styles from './PracticeCard.module.css';
 
 interface PracticeCardProps {
@@ -15,8 +15,7 @@ const PracticeCard: React.FC<PracticeCardProps> = ({
   onDrawEnd
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const writerRef = useRef<any>(null);
-  const [isDrawing, setIsDrawing] = useState(false);
+  const writerRef = useRef<HanziWriterInstance | null>(null);
   const [isWriterReady, setIsWriterReady] = useState(false);
 
   // Inicializar Hanzi Writer cuando el componente se monta
@@ -101,9 +100,10 @@ const PracticeCard: React.FC<PracticeCardProps> = ({
       setIsWriterReady(false);
       
       // Limpiar de manera segura sin acceder a propiedades internas
-      if (containerRef.current) {
-        while (containerRef.current.firstChild) {
-          containerRef.current.removeChild(containerRef.current.firstChild);
+      const container = containerRef.current;
+      if (container) {
+        while (container.firstChild) {
+          container.removeChild(container.firstChild);
         }
       }
       
@@ -145,66 +145,13 @@ const PracticeCard: React.FC<PracticeCardProps> = ({
   // Manejar inicio de dibujo
   const handleTouchStart = (e: React.TouchEvent | React.MouseEvent) => {
     e.preventDefault();
-    setIsDrawing(true);
     onDrawStart?.();
   };
 
   // Manejar fin de dibujo
   const handleTouchEnd = (e: React.TouchEvent | React.MouseEvent) => {
     e.preventDefault();
-    setIsDrawing(false);
     onDrawEnd?.();
-  };
-
-  // Resetear carácter de manera segura
-  const handleReset = () => {
-    if (writerRef.current && 
-        typeof writerRef.current === 'object' && 
-        typeof writerRef.current.quiz === 'function') {
-      
-      // Primero limpiar el contenedor
-      if (containerRef.current) {
-        while (containerRef.current.firstChild) {
-          containerRef.current.removeChild(containerRef.current.firstChild);
-        }
-      }
-      
-      // Recrear el writer
-      setTimeout(() => {
-        if (containerRef.current && watermarkCharacter) {
-          writerRef.current = HanziWriter.create(containerRef.current, watermarkCharacter, {
-            width: containerRef.current.offsetWidth || 300,
-            height: containerRef.current.offsetHeight || 300,
-            padding: 5,
-            showOutline: true,
-            showCharacter: false,
-            outlineColor: '#CCCCCC',
-            strokeColor: '#000000',
-            radicalColor: null,
-            strokeFadeDuration: 400,
-            strokeHighlightSpeed: 2,
-            drawingWidth: 4,
-            strokeWidth: 4,
-            drawingFadeDuration: 300,
-            drawingColor: '#2E7D32',
-            showHintAfterMisses: 3,
-            highlightOnComplete: true,
-            highlightColor: '#4CAF50',
-            delayBetweenStrokes: 400,
-          });
-          
-          writerRef.current.quiz({
-            onMistake: () => {
-              onDrawStart?.();
-            },
-            onComplete: () => {
-              onDrawEnd?.();
-              setIsDrawing(false);
-            }
-          });
-        }
-      }, 100);
-    }
   };
 
   return (

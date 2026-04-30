@@ -1,7 +1,6 @@
 // src/pages/TabsLayout.tsx - NUEVO ARCHIVO
 import React from 'react';
-import { IonTabs, IonTabBar, IonTabButton, IonIcon, IonLabel, IonRouterOutlet } from '@ionic/react';
-import { statsChart, book, settings } from 'ionicons/icons';
+import { IonTabs, IonRouterOutlet } from '@ionic/react';
 import { Redirect, Route } from 'react-router-dom';
 import ProgressScreen from './tabs/ProgressScreen';
 import PracticeOverviewScreen from './tabs/PracticeOverviewScreen';

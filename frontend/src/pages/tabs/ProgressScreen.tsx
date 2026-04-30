@@ -9,13 +9,9 @@ import {
   IonCard, 
   IonCardContent 
 } from '@ionic/react';
-
-import { useHistory } from 'react-router-dom';
 import './TabStyles.css';
 
 const ProgressScreen: React.FC = () => {
-  const history = useHistory();
-
   return (
     <IonPage>
       <IonHeader>

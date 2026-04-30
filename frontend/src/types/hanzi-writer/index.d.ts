@@ -22,8 +22,8 @@ declare module 'hanzi-writer' {
   }
 
   export interface QuizOptions {
-    onMistake?: (strokeData: any) => void;
-    onComplete?: (summary: any) => void;
+    onMistake?: (strokeData: unknown) => void;
+    onComplete?: (summary: unknown) => void;
   }
 
   export interface HanziWriterInstance {
@@ -42,7 +42,7 @@ declare module 'hanzi-writer' {
       options: HanziWriterOptions
     ) => HanziWriterInstance;
     
-    loadCharacterData: (character: string) => Promise<any>;
+    loadCharacterData: (character: string) => Promise<unknown>;
   }
 
   const HanziWriter: HanziWriterStatic;

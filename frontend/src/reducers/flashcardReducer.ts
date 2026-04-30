@@ -1,7 +1,7 @@
-import { FlashcardState, FlashcardAction } from '../types/flashcard.types';
+import { Character, FlashcardState, FlashcardAction } from '../types/flashcard.types';
 
 export const initialState: FlashcardState = {
-  currentCharacter: {} as any,
+  currentCharacter: {} as Character,
   showAnswer: false,
   isCorrect: false,
   streak: 0,

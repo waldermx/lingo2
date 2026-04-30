@@ -13,7 +13,7 @@ import {
 } from '@ionic/react';
 import { arrowBack, helpCircle } from 'ionicons/icons';
 import { useHistory } from 'react-router-dom';
-import HanziWriter from 'hanzi-writer';
+import HanziWriter, { HanziWriterInstance } from 'hanzi-writer';
 import charactersData from '../data/characters.json';
 import './PracticeQuizScreen.css';
 
@@ -29,13 +29,12 @@ interface Character {
 
 const PracticeQuizScreen: React.FC = () => {
   const history = useHistory();
-  const writerRef = useRef<any>(null);
+  const writerRef = useRef<HanziWriterInstance | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showHint, setShowHint] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [results, setResults] = useState<boolean[]>([]);
-  const [isDrawing, setIsDrawing] = useState(false);
 
   const characters: Character[] = charactersData;
   const currentCharacter = characters[currentIndex];
@@ -73,11 +72,8 @@ const PracticeQuizScreen: React.FC = () => {
       });
 
       writerRef.current.quiz({
-        onMistake: (strokeData: any) => {
-          setIsDrawing(true);
-        },
-        onComplete: (summary: any) => {
-          setIsDrawing(false);
+        onMistake: () => {},
+        onComplete: () => {
           // Marcar como correcto
           const newResults = [...results, true];
           setResults(newResults);

@@ -15,7 +15,7 @@ import {
   IonRow,
   IonCol
 } from '@ionic/react';
-import { arrowBack, refresh, home } from 'ionicons/icons';
+import { refresh, home } from 'ionicons/icons';
 import { useHistory, useLocation } from 'react-router-dom';
 import './PracticeResultsScreen.css';
 

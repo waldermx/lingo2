@@ -17,7 +17,6 @@ import FlashcardHeader from '../components/FlashcardHeader/FlashcardHeader';
 import CharacterDisplay from '../components/CharacterDisplay/CharacterDisplay';
 import PracticeCard from '../components/PracticeCard/PracticeCard';
 import ActionButtons from '../components/ActionButtons/ActionButtons';
-import DefinitionFooter from '../components/DefinitionFooter/DefinitionFooter';
 import styles from './FlashcardScreen.module.css';
 import '../styles/variables.css';
 import { close } from 'ionicons/icons';
@@ -47,7 +46,7 @@ const SAMPLE_CHARACTERS = [
 
 const FlashcardScreen: React.FC = () => {
   const router = useIonRouter();
-  const [state, dispatch] = useReducer(flashcardReducer, initialState);
+  const [, dispatch] = useReducer(flashcardReducer, initialState);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showPinyin, setShowPinyin] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
