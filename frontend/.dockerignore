@@ -15,19 +15,19 @@
 **/.nyc_output
 **/cypress/screenshots
 **/cypress/videos
-
-# ─── Frontend source (not needed for the API build) ──────────────────────────
-# frontend/package.json IS needed by pnpm workspace install — keep it.
-frontend/src
 frontend/cypress
-frontend/public
-frontend/resources
-frontend/capacitor.config.ts
 frontend/cypress.config.ts
-frontend/ionic.config.json
-frontend/tsconfig*.json
-frontend/vite.config.ts
-frontend/index.html
+
+# ─── Backend source (not needed for frontend build) ──────────────────────────
+# backend/package.json IS needed by pnpm workspace install — keep it.
+backend/src
+backend/prisma
+backend/tsup.config.ts
+backend/vitest.config.ts
+backend/tsconfig.json
+backend/eslint.config.js
+backend/Dockerfile
+backend/Dockerfile.dev
 
 # ─── Monitoring / infra config ────────────────────────────────────────────────
 docker
