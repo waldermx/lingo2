@@ -36,8 +36,11 @@ WORKDIR /app
 RUN pnpm --filter @lingo2/backend deploy --prod --ignore-scripts --legacy /standalone
 
 # Copy the Alpine-native Prisma engine generated during `pnpm install` above.
-# With pnpm, `prisma generate` puts .prisma in the package's own node_modules.
-RUN cp -r /app/backend/node_modules/.prisma /standalone/node_modules/.prisma
+# In pnpm workspaces, .prisma can live under virtual-store paths, so resolve it dynamically.
+RUN PRISMA_DIR="$(find /app -type d -path '*/node_modules/.prisma' | head -n 1)" \
+  && test -n "$PRISMA_DIR" \
+  && mkdir -p /standalone/node_modules \
+  && cp -r "$PRISMA_DIR" /standalone/node_modules/.prisma
 
 # Copy prisma schema + migrations so `prisma migrate deploy` works at runtime.
 RUN cp -r /app/backend/prisma /standalone/prisma
