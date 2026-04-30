@@ -1,0 +1,231 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// Lingo2 Database Schema (Prisma)
+//
+// Dual-database strategy:
+//   Development:  SQLite   (DATABASE_URL="file:./dev.db")
+//   Production:   PostgreSQL (DATABASE_URL="postgresql://...")
+//
+// Notes for SQLite compatibility:
+//   - Json fields fall back to String in SQLite; repos handle the parse/stringify.
+//   - Enum values are stored as Int or String (no native Enum in SQLite).
+//   - Unsupported features: GIN indexes (Postgres-only, added via raw SQL in migrations).
+// ─────────────────────────────────────────────────────────────────────────────
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── Characters ────────────────────────────────────────────────────────────────
+
+/// Chinese character entry from HSK 1–4 vocabulary corpus.
+/// Static content — not modified by user interactions.
+model Character {
+  id            String   @id @default(uuid())
+  character     String   @unique @db.VarChar(8)
+  pinyin        String   @db.VarChar(100)
+  hskLevel      Int      @map("hsk_level")
+  strokeCount   Int      @map("stroke_count")
+  radical       String   @db.VarChar(8)
+  frequencyRank Int      @map("frequency_rank")
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  translations CharacterTranslation[]
+  examples     CharacterExample[]
+  cards        Card[]
+
+  @@index([hskLevel])
+  @@index([frequencyRank])
+  @@map("characters")
+}
+
+/// Localized definition of a character. One row per (character, locale) pair.
+/// Adding a new language only requires inserting rows — no schema migration needed.
+model CharacterTranslation {
+  id          String @id @default(uuid())
+  characterId String @map("character_id")
+  /// BCP 47 locale code: "es", "en", "fr", etc.
+  locale      String @db.VarChar(10)
+  definition  String @db.Text
+
+  character Character @relation(fields: [characterId], references: [id])
+
+  @@unique([characterId, locale])
+  @@index([locale])
+  @@map("character_translations")
+}
+
+/// Localized example sentences. One or more rows per (character, locale) pair.
+model CharacterExample {
+  id                  String @id @default(uuid())
+  characterId         String @map("character_id")
+  locale              String @db.VarChar(10)
+  sentenceZh          String @map("sentence_zh") @db.Text
+  sentenceTranslation String @map("sentence_translation") @db.Text
+
+  character Character @relation(fields: [characterId], references: [id])
+
+  @@index([characterId, locale])
+  @@map("character_examples")
+}
+
+// ─── Users ────────────────────────────────────────────────────────────────────
+
+/// Application user. Supports local (email/password) and Google OAuth authentication.
+model User {
+  id                String    @id @default(uuid())
+  email             String    @unique @db.VarChar(255)
+  displayName       String    @map("display_name") @db.VarChar(100)
+  avatarUrl         String?   @map("avatar_url") @db.VarChar(500)
+  /// Authentication provider: "local" | "google"
+  provider          String    @db.VarChar(20)
+  /// Bcrypt hash. Null for OAuth users.
+  passwordHash      String?   @map("password_hash") @db.Text
+  /// Provider's subject ID (e.g., Google sub). Null for local users.
+  providerId        String?   @map("provider_id") @db.VarChar(255)
+  /// Bcrypt hash of the current refresh token. Null when logged out.
+  refreshTokenHash  String?   @map("refresh_token_hash") @db.Text
+  /// BCP 47 locale preference: "es" (default) | "en"
+  preferredLocale   String    @default("es") @map("preferred_locale") @db.VarChar(10)
+  /// FSRS-5 weights array stored as JSON. Null = use global defaults.
+  fsrsParameters    Json?     @map("fsrs_parameters")
+  /// Max new characters to introduce per day.
+  dailyNewCards     Int       @default(10) @map("daily_new_cards")
+  /// Max review cards to show per day.
+  maxReviews        Int       @default(100) @map("max_reviews")
+  onboardingCompleted Boolean @default(false) @map("onboarding_completed")
+  startingHskLevel  Int?      @map("starting_hsk_level")
+  createdAt         DateTime  @default(now()) @map("created_at")
+  updatedAt         DateTime  @updatedAt @map("updated_at")
+
+  cards         Card[]
+  reviewLogs    ReviewLog[]
+  gamification  UserGamification?
+
+  @@index([provider, providerId])
+  @@map("users")
+}
+
+// ─── FSRS Cards ────────────────────────────────────────────────────────────────
+
+/// FSRS learning state for a specific user × character pair.
+/// Created when a character is first added to the user's deck.
+/// Updated after every review via FSRSService.scheduleBinary().
+model Card {
+  id            String    @id @default(uuid())
+  userId        String    @map("user_id")
+  characterId   String    @map("character_id")
+  /// FSRS-5 card state: 0=New, 1=Learning, 2=Review, 3=Relearning
+  state         Int       @default(0)
+  /// FSRS Stability S: estimated days until retrievability falls below threshold
+  stability     Float     @default(0)
+  /// FSRS Difficulty D: intrinsic hardness in range [1, 10]
+  difficulty    Float     @default(0)
+  /// Timestamp of next scheduled review
+  due           DateTime  @default(now())
+  /// Total correct reviews
+  reps          Int       @default(0)
+  /// Total Rating.Again responses (memory lapses)
+  lapses        Int       @default(0)
+  /// Timestamp of the most recent review
+  lastReview    DateTime? @map("last_review")
+  /// FSRS internal: days elapsed at last scheduling
+  elapsedDays   Int       @default(0) @map("elapsed_days")
+  /// FSRS internal: interval scheduled at last review
+  scheduledDays Int       @default(0) @map("scheduled_days")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  user      User      @relation(fields: [userId], references: [id])
+  character Character @relation(fields: [characterId], references: [id])
+  logs      ReviewLog[]
+
+  @@unique([userId, characterId])
+  @@index([userId, due])   // Critical: drive due-card queries
+  @@index([userId, state]) // Drive state distribution queries
+  @@map("cards")
+}
+
+// ─── Review Logs ────────────────────────────────────────────────────────────────
+
+/// Immutable audit log of every review event. Never updated — only inserted.
+/// Powers the activity heatmap, retention statistics, and future FSRS optimizer.
+model ReviewLog {
+  id            String   @id @default(uuid())
+  cardId        String   @map("card_id")
+  userId        String   @map("user_id")
+  /// FSRS Rating applied: 1=Again (incorrect), 3=Good (correct)
+  rating        Int
+  /// Raw HanziWriter mistake count (0 = correct, >0 = incorrect)
+  totalMistakes Int      @map("total_mistakes")
+  /// Card state BEFORE the review (FSRS CardState enum int)
+  stateBefore   Int      @map("state_before")
+  /// Card state AFTER the review
+  stateAfter    Int      @map("state_after")
+  stability     Float
+  difficulty    Float
+  elapsedDays   Int      @map("elapsed_days")
+  scheduledDays Int      @map("scheduled_days")
+  reviewedAt    DateTime @default(now()) @map("reviewed_at")
+
+  card Card @relation(fields: [cardId], references: [id])
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([userId, reviewedAt]) // Drive heatmap and stats queries
+  @@map("review_logs")
+}
+
+// ─── Gamification ─────────────────────────────────────────────────────────────
+
+/// Gamification state: XP, level (derived), streak. One record per user.
+model UserGamification {
+  id               String    @id @default(uuid())
+  userId           String    @unique @map("user_id")
+  xpTotal          Int       @default(0) @map("xp_total")
+  streakDays       Int       @default(0) @map("streak_days")
+  longestStreak    Int       @default(0) @map("longest_streak")
+  lastActivityDate DateTime? @map("last_activity_date")
+  createdAt        DateTime  @default(now()) @map("created_at")
+  updatedAt        DateTime  @updatedAt @map("updated_at")
+
+  user         User                @relation(fields: [userId], references: [id])
+  achievements UserAchievement[]
+
+  @@map("user_gamification")
+}
+
+/// System-defined achievement catalogue. Seeded at startup, not user-modifiable.
+model Achievement {
+  id            String @id
+  slug          String @unique @db.VarChar(100)
+  titleEs       String @map("title_es") @db.VarChar(200)
+  titleEn       String @map("title_en") @db.VarChar(200)
+  descriptionEs String @map("description_es") @db.Text
+  descriptionEn String @map("description_en") @db.Text
+  /// Achievement category: "reviews" | "streak" | "mastery" | "accuracy" | "special"
+  type          String @db.VarChar(50)
+  xpReward      Int    @map("xp_reward")
+  iconEmoji     String @map("icon_emoji") @db.VarChar(10)
+
+  userAchievements UserAchievement[]
+
+  @@map("achievements")
+}
+
+/// Junction table recording which achievements a user has unlocked and when.
+model UserAchievement {
+  id              String   @id @default(uuid())
+  userId          String   @map("user_id")
+  achievementId   String   @map("achievement_id")
+  unlockedAt      DateTime @default(now()) @map("unlocked_at")
+
+  gamification  UserGamification @relation(fields: [userId], references: [userId])
+  achievement   Achievement      @relation(fields: [achievementId], references: [id])
+
+  @@unique([userId, achievementId])
+  @@map("user_achievements")
+}

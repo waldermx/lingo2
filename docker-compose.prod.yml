@@ -1,0 +1,153 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Docker Compose — Production (Dokploy + Traefik)
+#
+# Assumptions:
+#   - Dokploy is installed on the VPS with Traefik running as the reverse proxy.
+#   - Traefik is configured to handle SSL via Let's Encrypt.
+#   - The Traefik network is named "traefik-public" (default Dokploy setup).
+#   - All secrets are provided via .env.prod (never committed to git).
+#
+# First deploy:
+#   1. Copy .env.prod.example → .env.prod and fill all values.
+#   2. docker compose -f docker-compose.prod.yml up -d
+#   3. docker compose -f docker-compose.prod.yml exec api pnpm db:migrate:prod
+#   4. docker compose -f docker-compose.prod.yml exec api pnpm db:seed
+#
+# Traefik label conventions:
+#   - API is served at api.yourdomain.com
+#   - Frontend is served at yourdomain.com and www.yourdomain.com
+# ─────────────────────────────────────────────────────────────────────────────
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    env_file: .env.prod
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - internal
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD} --loglevel warning
+    volumes:
+      - redis_data:/data
+    networks:
+      - internal
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD}", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api:
+    image: ghcr.io/${GITHUB_REPOSITORY}/lingo2-api:${IMAGE_TAG:-latest}
+    restart: unless-stopped
+    env_file: .env.prod
+    networks:
+      - internal
+      - traefik-public
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:3000/api/v1/health || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    labels:
+      # Traefik: enable routing for this service
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik-public"
+      # Router: match requests to api subdomain
+      - "traefik.http.routers.lingo2-api.rule=Host(`${API_DOMAIN}`)"
+      - "traefik.http.routers.lingo2-api.entrypoints=websecure"
+      - "traefik.http.routers.lingo2-api.tls=true"
+      - "traefik.http.routers.lingo2-api.tls.certresolver=letsencrypt"
+      # Service: connect to backend port
+      - "traefik.http.services.lingo2-api.loadbalancer.server.port=3000"
+      # Middleware: security headers
+      - "traefik.http.routers.lingo2-api.middlewares=lingo2-headers@docker"
+      - "traefik.http.middlewares.lingo2-headers.headers.stsSeconds=31536000"
+      - "traefik.http.middlewares.lingo2-headers.headers.stsIncludeSubdomains=true"
+      - "traefik.http.middlewares.lingo2-headers.headers.forceSTSHeader=true"
+
+  frontend:
+    image: ghcr.io/${GITHUB_REPOSITORY}/lingo2-frontend:${IMAGE_TAG:-latest}
+    restart: unless-stopped
+    networks:
+      - traefik-public
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik-public"
+      - "traefik.http.routers.lingo2-frontend.rule=Host(`${APP_DOMAIN}`) || Host(`www.${APP_DOMAIN}`)"
+      - "traefik.http.routers.lingo2-frontend.entrypoints=websecure"
+      - "traefik.http.routers.lingo2-frontend.tls=true"
+      - "traefik.http.routers.lingo2-frontend.tls.certresolver=letsencrypt"
+      - "traefik.http.services.lingo2-frontend.loadbalancer.server.port=80"
+      # Redirect www → apex
+      - "traefik.http.middlewares.lingo2-www-redirect.redirectregex.regex=^https://www\\.(.+)"
+      - "traefik.http.middlewares.lingo2-www-redirect.redirectregex.replacement=https://$${1}"
+      - "traefik.http.middlewares.lingo2-www-redirect.redirectregex.permanent=true"
+      - "traefik.http.routers.lingo2-frontend.middlewares=lingo2-www-redirect@docker"
+
+  prometheus:
+    image: prom/prometheus:latest
+    restart: unless-stopped
+    volumes:
+      - ./docker/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    networks:
+      - internal
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--storage.tsdb.retention.time=30d'
+
+  grafana:
+    image: grafana/grafana:latest
+    restart: unless-stopped
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASSWORD}
+      GF_SERVER_ROOT_URL: "https://grafana.${APP_DOMAIN}"
+      GF_ANALYTICS_REPORTING_ENABLED: 'false'
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./docker/grafana/provisioning:/etc/grafana/provisioning:ro
+    networks:
+      - internal
+      - traefik-public
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik-public"
+      - "traefik.http.routers.grafana.rule=Host(`grafana.${APP_DOMAIN}`)"
+      - "traefik.http.routers.grafana.entrypoints=websecure"
+      - "traefik.http.routers.grafana.tls=true"
+      - "traefik.http.routers.grafana.tls.certresolver=letsencrypt"
+      - "traefik.http.services.grafana.loadbalancer.server.port=3000"
+
+networks:
+  internal:
+    driver: bridge
+  traefik-public:
+    external: true   # Must already exist, created by Dokploy/Traefik
+
+volumes:
+  postgres_data:
+  redis_data:
+  prometheus_data:
+  grafana_data:
