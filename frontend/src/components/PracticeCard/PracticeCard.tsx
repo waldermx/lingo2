@@ -68,10 +68,7 @@ const PracticeCard: React.FC<PracticeCardProps> = ({
           highlightOnComplete: true,
           highlightColor: '#4CAF50',
           delayBetweenStrokes: 400,
-          
-          // Configuración adicional para mejorar la visibilidad
           strokeAnimationSpeed: 1.5,
-          highlightCompleteColor: '#4CAF50',
         });
 
         // Iniciar el modo quiz
@@ -82,7 +79,6 @@ const PracticeCard: React.FC<PracticeCardProps> = ({
             },
             onComplete: () => {
               onDrawEnd?.();
-              setIsDrawing(false);
             }
           });
         }
@@ -121,7 +117,7 @@ const PracticeCard: React.FC<PracticeCardProps> = ({
         
         // Solo actualizar si el writer está listo
         setTimeout(() => {
-          if (containerRef.current) {
+          if (containerRef.current && writerRef.current) {
             writerRef.current.updateDimensions({
               width: containerRef.current.offsetWidth,
               height: containerRef.current.offsetHeight

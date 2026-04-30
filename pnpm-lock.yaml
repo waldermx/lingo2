@@ -156,6 +156,9 @@ importers:
       '@ionic/react-router':
         specifier: ^8.5.0
         version: 8.8.5(react-dom@19.0.0(react@19.0.0))(react-router-dom@5.3.4(react@19.0.0))(react-router@5.3.4(react@19.0.0))(react@19.0.0)
+      '@lingo2/shared':
+        specifier: workspace:*
+        version: link:../shared
       '@tanstack/react-query':
         specifier: ^5.100.6
         version: 5.100.6(react@19.0.0)

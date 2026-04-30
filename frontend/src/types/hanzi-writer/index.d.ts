@@ -11,6 +11,7 @@ declare module 'hanzi-writer' {
     radicalColor?: string | null;
     strokeFadeDuration?: number;
     strokeHighlightSpeed?: number;
+    strokeAnimationSpeed?: number;
     drawingWidth?: number;
     strokeWidth?: number;
     drawingFadeDuration?: number;
@@ -23,7 +24,7 @@ declare module 'hanzi-writer' {
 
   export interface QuizOptions {
     onMistake?: (strokeData: unknown) => void;
-    onComplete?: (summary: unknown) => void;
+    onComplete?: (summary: { totalMistakes: number }) => void;
   }
 
   export interface HanziWriterInstance {
@@ -32,6 +33,7 @@ declare module 'hanzi-writer' {
     showCharacter: () => void;
     hideCharacter: () => void;
     animateCharacter: () => void;
+    pauseAnimation: () => Promise<void>;
     setCharacter: (character: string) => void;
   }
 

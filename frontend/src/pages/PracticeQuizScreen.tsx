@@ -48,7 +48,7 @@ const PracticeQuizScreen: React.FC = () => {
   const [choices, setChoices] = useState<string[]>([]);
   const [choiceResult, setChoiceResult] = useState<'correct' | 'wrong' | null>(null);
 
-  const characters: Character[] = charactersData;
+  const characters: Character[] = charactersData as Character[];
   const currentCharacter = characters[currentIndex];
 
   const advanceNext = useCallback((correct: boolean) => {
@@ -146,119 +146,79 @@ const PracticeQuizScreen: React.FC = () => {
   };
 
   return (
-      }
-
-      // Crear instancia de Hanzi Writer en modo quiz
-      writerRef.current = HanziWriter.create(container, currentCharacter.character, {
-        width: 300,
-        height: 300,
-        padding: 5,
-        showOutline: false,
-        showCharacter: false,
-        outlineColor: '#666',
-        strokeColor: '#000',
-        drawingColor: '#2E7D32',
-        drawingWidth: 40, // Grosor del trazo del usuario
-        strokeWidth: 5, // Grosor del contorno guía
-        showHintAfterMisses: 2,
-        highlightOnComplete: true,
-        highlightColor: '#4CAF50',
-        highlightCompleteColor: '#4CAF50',
-        strokeAnimationSpeed: 1.5,
-        delayBetweenStrokes: 400,
-      });
-
-      writerRef.current.quiz({
-        onMistake: () => {},
-        onComplete: () => {
-          // Marcar como correcto
-          const newResults = [...results, true];
-          setResults(newResults);
-          
-          // Avanzar al siguiente carácter después de un breve delay
-          setTimeout(() => {
-            if (currentIndex < characters.length - 1) {
-              setCurrentIndex(prev => prev + 1);
-              setShowHint(false);
-            } else {
-              // Terminó la práctica, ir a resultados
-              history.push('/practice-results', { results: newResults });
-            }
-          }, 800);
-        }
-      });
-
-      setIsLoading(false);
-    };
-
-    initWriter();
-
-    return () => {
-      if (writerRef.current) {
-        writerRef.current = null;
-      }
-    };
-  }, [currentIndex, currentCharacter, history, characters.length, results]);
-
-  const handleBack = () => {
-    history.goBack();
-  };
-
-  const handleShowHint = () => {
-    setShowHint(true);
-  };
-
-  return (
     <IonPage>
       <IonHeader>
         <IonToolbar>
           <IonButtons slot="start">
-            <IonButton onClick={handleBack}>
-              <IonIcon icon={arrowBack} slot="icon-only" />
-            </IonButton>
+            <IonButton onClick={() => setInputMode(null)}><IonIcon icon={arrowBack} /></IonButton>
           </IonButtons>
-          <IonTitle>Práctica</IonTitle>
-          <IonButtons slot="end">
-            <IonButton onClick={handleShowHint} disabled={showHint}>
-              <IonIcon icon={helpCircle} slot="icon-only" />
-            </IonButton>
-          </IonButtons>
+          <div className="quiz-progress-container">
+            <div className="quiz-progress-track">
+              <div className="quiz-progress-fill" style={{ width: `${((currentIndex) / characters.length) * 100}%` }} />
+            </div>
+            <span className="quiz-progress-label">{currentIndex + 1}/{characters.length}</span>
+          </div>
+          {inputMode === 'draw' && (
+            <IonButtons slot="end">
+              <IonButton onClick={() => setShowHint(true)} disabled={showHint} fill="clear">
+                <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--c-blue)' }}>Pista</span>
+              </IonButton>
+            </IonButtons>
+          )}
         </IonToolbar>
       </IonHeader>
 
-      <IonContent className="ion-padding">
-        <div className="quiz-container">
-          {/* Significado del carácter */}
-          <div className="character-meaning">
-            <p>{currentCharacter.definition}</p>
-          </div>
+      <IonContent>
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={currentIndex}
+            className="quiz-scene"
+            initial={{ opacity: 0, x: 30 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -30 }}
+            transition={{ duration: 0.22 }}
+          >
+            <div className="quiz-definition">{currentCharacter.definition}</div>
 
-          {/* Área de escritura */}
-          <div className="writing-area">
-            <div 
-              ref={containerRef}
-              className="hanzi-writer-container"
-              style={{ width: '300px', height: '300px', margin: '0 auto' }}
-            />
-          </div>
-
-          {/* Pista (pinyin) */}
-          {showHint && (
-            <div className="hint-section">
-              <div className="hint-text">
-                Pinyin: <strong>{currentCharacter.pinyin}</strong>
+            {inputMode === 'draw' ? (
+              <div className="quiz-writer-wrapper">
+                <div ref={containerRef} className="quiz-writer" style={{ width: 260, height: 260 }} />
+                {showHint && (
+                  <motion.div className="quiz-hint" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+                    Pinyin: <strong style={{ color: 'var(--c-blue)' }}>{currentCharacter.pinyin}</strong>
+                  </motion.div>
+                )}
               </div>
-            </div>
-          )}
-
-          {/* Progreso */}
-          <div className="progress-indicator">
-            Carácter {currentIndex + 1} de {characters.length}
-          </div>
-        </div>
+            ) : (
+              <div className="quiz-choice-wrapper">
+                <span className="quiz-choice-hanzi">{currentCharacter.character}</span>
+                <div className="quiz-choices">
+                  {choices.map((choice) => {
+                    const isCorrect = choice === currentCharacter.pinyin;
+                    const isSelected = choiceResult !== null && isCorrect;
+                    const isWrong = choiceResult === 'wrong' && choice === choices.find((c) => c !== currentCharacter.pinyin);
+                    return (
+                      <motion.button
+                        key={choice}
+                        className={`quiz-choice-btn ${choiceResult && isCorrect ? 'correct' : ''} ${choiceResult === 'wrong' && !isCorrect && choice === choices[0] ? '' : ''}`}
+                        style={{
+                          background: choiceResult && isCorrect ? 'var(--c-green-bg)' : 'var(--c-surface)',
+                          borderColor: choiceResult && isCorrect ? 'var(--c-green)' : 'var(--c-separator)',
+                          color: choiceResult && isCorrect ? 'var(--c-green)' : 'var(--c-text)',
+                        }}
+                        onClick={() => handleChoiceSelect(choice)}
+                        whileTap={{ scale: 0.96 }}
+                      >
+                        {choice}
+                      </motion.button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+          </motion.div>
+        </AnimatePresence>
       </IonContent>
-
-      <IonLoading isOpen={isLoading} message="Cargando..." />
     </IonPage>
   );
 };
