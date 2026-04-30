@@ -17,6 +17,8 @@ COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY backend/package.json  ./backend/
 COPY frontend/package.json ./frontend/
 COPY shared/package.json   ./shared/
+# prisma generate runs as postinstall — schema must exist before `pnpm install`
+COPY backend/prisma/schema.prisma ./backend/prisma/schema.prisma
 # postinstall runs `prisma generate`, producing the Alpine-native binary.
 RUN pnpm install --frozen-lockfile
 
