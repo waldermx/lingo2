@@ -33,7 +33,7 @@ RUN pnpm build
 # --ignore-scripts skips postinstall in the new dir; we copy the already-
 # generated Prisma binary from the builder's node_modules manually below.
 WORKDIR /app
-RUN pnpm --filter @lingo2/backend deploy --prod --ignore-scripts /standalone
+RUN pnpm --filter @lingo2/backend deploy --prod --ignore-scripts --legacy /standalone
 
 # Copy the Alpine-native Prisma engine generated during `pnpm install` above.
 RUN cp -r /app/node_modules/.prisma /standalone/node_modules/.prisma
