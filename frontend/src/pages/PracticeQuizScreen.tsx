@@ -195,8 +195,6 @@ const PracticeQuizScreen: React.FC = () => {
                 <div className="quiz-choices">
                   {choices.map((choice) => {
                     const isCorrect = choice === currentCharacter.pinyin;
-                    const isSelected = choiceResult !== null && isCorrect;
-                    const isWrong = choiceResult === 'wrong' && choice === choices.find((c) => c !== currentCharacter.pinyin);
                     return (
                       <motion.button
                         key={choice}

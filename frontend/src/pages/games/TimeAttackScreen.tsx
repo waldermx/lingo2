@@ -41,7 +41,7 @@ const TimeAttackScreen: React.FC = () => {
   const inputMode = location.state?.inputMode ?? 'choice';
 
   const {
-    isActive, score, combo, correct, incorrect,
+    score, combo, correct, incorrect,
     currentIndex, queue,
     startSession, recordCorrect, recordIncorrect, nextCharacter,
     endSession, tickTimer, elapsedMs, updatePersonalBest,
@@ -91,6 +91,7 @@ const TimeAttackScreen: React.FC = () => {
       recordActivity();
       setPhase('done');
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [remaining, phase]);
 
   // Build choices when currentIndex changes (choice mode)
@@ -98,6 +99,7 @@ const TimeAttackScreen: React.FC = () => {
     if (phase !== 'playing' || inputMode !== 'choice' || queue.length === 0) return;
     setChoices(buildChoices(queue as Char[], currentIndex));
     setChoiceResult(null);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentIndex, phase]);
 
   // HanziWriter (draw mode)
@@ -121,6 +123,7 @@ const TimeAttackScreen: React.FC = () => {
         setTimeout(() => nextCharacter(), 600);
       },
     });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentIndex, phase, inputMode]);
 
   const handleChoice = (pinyin: string) => {

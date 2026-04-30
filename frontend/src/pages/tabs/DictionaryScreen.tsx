@@ -8,9 +8,6 @@ import {
   IonTitle,
   IonSearchbar,
   IonList,
-  IonItem,
-  IonLabel,
-  IonNote,
   IonSpinner,
 } from '@ionic/react';
 import { useQuery } from '@tanstack/react-query';

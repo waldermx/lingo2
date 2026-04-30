@@ -10,7 +10,7 @@ import {
   IonIcon,
 } from '@ionic/react';
 import { arrowBack } from 'ionicons/icons';
-import { motion, AnimatePresence, useMotionValue, useTransform } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useHistory, useLocation } from 'react-router-dom';
 import HanziWriter, { HanziWriterInstance } from 'hanzi-writer';
 import { useSessionStore } from '../../stores/sessionStore';
@@ -80,7 +80,7 @@ const BombModeScreen: React.FC = () => {
   const inputMode = location.state?.inputMode ?? 'choice';
 
   const {
-    isActive, score, combo, correct, incorrect, hasExploded,
+    score, combo, correct, hasExploded,
     currentIndex, queue, bombFuseMs,
     startSession, recordCorrect, recordIncorrect, nextCharacter,
     endSession, tickTimer, explodeBomb, updatePersonalBest,
@@ -131,6 +131,7 @@ const BombModeScreen: React.FC = () => {
       recordActivity();
       setPhase('done');
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [bombFuseMs, hasExploded, phase]);
 
   // Build choices
@@ -138,6 +139,7 @@ const BombModeScreen: React.FC = () => {
     if (phase !== 'playing' || inputMode !== 'choice' || queue.length === 0) return;
     setChoices(buildChoices(queue as Char[], currentIndex));
     setChoiceResult(null);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentIndex, phase]);
 
   // HanziWriter (draw mode)
@@ -165,6 +167,7 @@ const BombModeScreen: React.FC = () => {
         setTimeout(() => nextCharacter(), 400);
       },
     });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentIndex, phase, inputMode]);
 
   const handleChoice = (pinyin: string) => {

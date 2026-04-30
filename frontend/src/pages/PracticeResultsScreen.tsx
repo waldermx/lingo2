@@ -9,7 +9,7 @@ import {
   IonButton,
   IonIcon,
 } from '@ionic/react';
-import { home, refreshOutline, shareOutline } from 'ionicons/icons';
+import { home, shareOutline } from 'ionicons/icons';
 import { motion } from 'framer-motion';
 import { useHistory, useLocation } from 'react-router-dom';
 import { useUserStore } from '../stores/userStore';
@@ -73,6 +73,7 @@ const PracticeResultsScreen: React.FC = () => {
       recordActivity();
       appliedRef.current = true;
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleShare = () => {

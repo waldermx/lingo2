@@ -15,7 +15,7 @@ import CharacterProgressGrid from '../../components/CharacterProgressGrid/Charac
 const HSK_TOTALS = [150, 150, 300, 600, 1200, 2500];
 
 const ProgressScreen: React.FC = () => {
-  const { activityHeatmap, hskLevel, charactersMastered } = useUserStore();
+  const { activityHeatmap, hskLevel } = useUserStore();
   const { cards } = useCharactersStore();
 
   const cardsList = useMemo(() => Object.values(cards), [cards]);

@@ -24,19 +24,6 @@ const AVATAR_OPTIONS = [
   { id: 'turtle', emoji: '🐢' },
 ];
 
-const LEVEL_THRESHOLDS = [0, 100, 250, 500, 900, 1500, 2500, 4000, 6000, 9000, 13000];
-
-function xpInCurrentLevel(xpTotal: number, level: number): number {
-  const base = LEVEL_THRESHOLDS[level - 1] ?? 0;
-  return xpTotal - base;
-}
-
-function xpNeededForLevel(level: number): number {
-  const base = LEVEL_THRESHOLDS[level - 1] ?? 0;
-  const next = LEVEL_THRESHOLDS[level] ?? base + 5000;
-  return next - base;
-}
-
 const ProfileScreen: React.FC = () => {
   const {
     displayName,
@@ -51,7 +38,6 @@ const ProfileScreen: React.FC = () => {
     lifetimeAccuracy,
     achievements,
     activityHeatmap,
-    dailyGoal,
     setAvatar,
     setUser,
     logout,
@@ -69,10 +55,6 @@ const ProfileScreen: React.FC = () => {
     const key = d.toISOString().split('T')[0];
     return { key, count: activityHeatmap[key] ?? 0 };
   });
-
-  const xpInLevel = xpInCurrentLevel(xpTotal, level);
-  const xpNeeded = xpNeededForLevel(level);
-  const levelProgress = Math.min(xpInLevel / xpNeeded, 1);
 
   const unlockedCount = achievements.filter((a) => a.unlocked).length;
 
