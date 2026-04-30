@@ -21,6 +21,7 @@ const PracticeCard: React.FC<PracticeCardProps> = ({
   // Inicializar Hanzi Writer cuando el componente se monta
   useEffect(() => {
     if (!containerRef.current || !watermarkCharacter) return;
+    const container = containerRef.current;
 
     const initWriter = async () => {
       try {
@@ -100,7 +101,6 @@ const PracticeCard: React.FC<PracticeCardProps> = ({
       setIsWriterReady(false);
       
       // Limpiar de manera segura sin acceder a propiedades internas
-      const container = containerRef.current;
       if (container) {
         while (container.firstChild) {
           container.removeChild(container.firstChild);

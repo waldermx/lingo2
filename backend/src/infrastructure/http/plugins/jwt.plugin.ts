@@ -38,7 +38,7 @@ export async function registerJwtPlugin(app: FastifyInstance): Promise<void> {
     async function (request: FastifyRequest, reply: FastifyReply): Promise<void> {
       try {
         await request.accessVerify();
-      } catch (err) {
+      } catch {
         reply.code(401).send({
           error: {
             code: 'AUTH_INVALID_TOKEN',

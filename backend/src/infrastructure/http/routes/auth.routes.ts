@@ -47,7 +47,7 @@ export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
       },
     },
     async (request, reply) => {
-      const body = RegisterBodySchema.parse(request.body);
+      const _body = RegisterBodySchema.parse(request.body);
       // TODO: wire to RegisterUser use case in Iter 4
       return reply.code(501).send({
         error: { code: 'NOT_IMPLEMENTED', message: 'Register not yet implemented', requestId: request.id },
