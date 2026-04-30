@@ -36,7 +36,11 @@ WORKDIR /app
 RUN pnpm --filter @lingo2/backend deploy --prod --ignore-scripts --legacy /standalone
 
 # Copy the Alpine-native Prisma engine generated during `pnpm install` above.
-RUN cp -r /app/node_modules/.prisma /standalone/node_modules/.prisma
+# With pnpm, `prisma generate` puts .prisma in the package's own node_modules.
+RUN cp -r /app/backend/node_modules/.prisma /standalone/node_modules/.prisma
+
+# Copy prisma schema + migrations so `prisma migrate deploy` works at runtime.
+RUN cp -r /app/backend/prisma /standalone/prisma
 
 # ── Stage 2: Runner ──────────────────────────────────────────────────────────
 FROM node:22-alpine AS runner
