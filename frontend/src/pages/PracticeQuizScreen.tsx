@@ -55,26 +55,35 @@ const PracticeQuizScreen: React.FC = () => {
 
   const advanceNext = useCallback((correct: boolean) => {
     if (!userId) incrementGuestReviews();
-    const newResults = [...results, correct];
-    setResults(newResults);
-    setTimeout(() => {
-      if (currentIndex < characters.length - 1) {
-        setCurrentIndex((i) => i + 1);
-        setShowHint(false);
-        setChoiceResult(null);
-        setChoices(inputMode === 'choice' ? buildChoices(characters, currentIndex + 1) : []);
-      } else {
-        history.push('/practice-results', { results: newResults });
-      }
-    }, 700);
-  }, [results, currentIndex, characters, history, inputMode, userId, incrementGuestReviews]);
+    setResults((prev) => {
+      const newResults = [...prev, correct];
+      setTimeout(() => {
+        setCurrentIndex((idx) => {
+          if (idx < characters.length - 1) {
+            setShowHint(false);
+            setChoiceResult(null);
+            setChoices(inputMode === 'choice' ? buildChoices(characters, idx + 1) : []);
+            return idx + 1;
+          } else {
+            history.push('/practice-results', { results: newResults });
+            return idx;
+          }
+        });
+      }, 700);
+      return newResults;
+    });
+  }, [characters, history, inputMode, userId, incrementGuestReviews]);
+
+  // Stable ref so the HanziWriter quiz callback never becomes stale
+  const advanceNextRef = useRef(advanceNext);
+  useEffect(() => { advanceNextRef.current = advanceNext; }, [advanceNext]);
 
   // Init choices when mode=choice
   useEffect(() => {
     if (inputMode === 'choice') setChoices(buildChoices(characters, currentIndex));
   }, [inputMode, currentIndex, characters]);
 
-  // Init HanziWriter in draw mode
+  // Init HanziWriter in draw mode — only re-runs when character or mode changes
   useEffect(() => {
     if (inputMode !== 'draw' || !containerRef.current || !currentCharacter) return;
     const container = containerRef.current;
@@ -100,11 +109,12 @@ const PracticeQuizScreen: React.FC = () => {
 
     writerRef.current.quiz({
       onMistake: () => {},
-      onComplete: () => { advanceNext(true); },
+      onComplete: () => { advanceNextRef.current(true); },
     });
 
     return () => { writerRef.current = null; };
-  }, [currentIndex, currentCharacter, inputMode, advanceNext]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentIndex, inputMode]);
 
   // Mode selection screen
   if (!inputMode) {
