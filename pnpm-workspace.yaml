@@ -2,3 +2,11 @@ packages:
   - 'frontend'
   - 'backend'
   - 'shared'
+
+onlyBuiltDependencies:
+  - '@prisma/client'
+  - '@prisma/engines'
+  - core-js
+  - cypress
+  - esbuild
+  - prisma

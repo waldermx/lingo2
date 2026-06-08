@@ -12,10 +12,12 @@ COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY backend/package.json  ./backend/
 COPY frontend/package.json ./frontend/
 COPY shared/package.json   ./shared/
-# prisma generate runs as backend postinstall — schema must exist before install.
+# prisma generate runs explicitly after install — schema must exist before install.
 COPY backend/prisma/schema.prisma ./backend/prisma/schema.prisma
-# postinstall runs `prisma generate` automatically.
-RUN pnpm install --frozen-lockfile
+# --ignore-scripts skips postinstall hooks (avoids pnpm 11 ERR_PNPM_IGNORED_BUILDS);
+# prisma generate is run explicitly so the client is available at runtime.
+RUN pnpm install --frozen-lockfile --ignore-scripts
+RUN cd /app/backend && node_modules/.bin/prisma generate
 
 WORKDIR /app/backend
 
