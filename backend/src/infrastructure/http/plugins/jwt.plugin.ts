@@ -55,22 +55,25 @@ export async function registerJwtPlugin(app: FastifyInstance): Promise<void> {
 declare module 'fastify' {
   interface FastifyInstance {
     authenticate: (request: FastifyRequest, reply: FastifyReply) => Promise<void>;
-    accessSign: (payload: object) => string;
-    accessVerify: () => Promise<{ id: string; email: string }>;
-    refreshSign: (payload: object) => string;
-    refreshVerify: () => Promise<{ id: string; tokenVersion: number }>;
-    /** Raw @fastify/jwt instance for the 'refresh' namespace (verify tokens from cookies/body). */
-    refreshJwt: { verify<T = unknown>(token: string): Promise<T> };
   }
   interface FastifyRequest {
     accessVerify: () => Promise<{ id: string; email: string; iat: number; exp: number }>;
   }
 }
 
-// Augment @fastify/jwt to define the user payload shape
 declare module '@fastify/jwt' {
   interface FastifyJWT {
     payload: { id: string; email: string };
     user: { id: string; email: string };
+  }
+  interface JWT {
+    access: {
+      sign(payload: object, options?: object): string;
+      verify<T = unknown>(token: string, options?: object): Promise<T>;
+    };
+    refresh: {
+      sign(payload: object, options?: object): string;
+      verify<T = unknown>(token: string, options?: object): Promise<T>;
+    };
   }
 }

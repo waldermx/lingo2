@@ -192,7 +192,7 @@
 
 .flipBtn {
   background: var(--c-bg-secondary);
-  color: var(--c-blue);
+  color: white;
   border: none;
   border-radius: var(--r-full);
   padding: 8px 20px;

@@ -8,10 +8,12 @@ import {
   IonTitle,
 } from '@ionic/react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useHistory } from 'react-router-dom';
 import { useUserStore } from '../../stores/userStore';
 import XPBar from '../../components/XPBar/XPBar';
 import StreakWidget from '../../components/StreakWidget/StreakWidget';
 import AchievementCard from '../../components/AchievementCard/AchievementCard';
+import apiFetch from '../../services/api';
 
 const AVATAR_OPTIONS = [
   { id: 'panda', emoji: '🐼' },
@@ -43,9 +45,20 @@ const ProfileScreen: React.FC = () => {
     logout,
   } = useUserStore();
 
+  const history = useHistory();
   const [editingName, setEditingName] = useState(false);
   const [nameInput, setNameInput] = useState(displayName);
   const [showAvatarPicker, setShowAvatarPicker] = useState(false);
+
+  const handleLogout = async () => {
+    try {
+      await apiFetch('/auth/logout', { method: 'POST' });
+    } catch {
+      // ignore — clear local state regardless
+    }
+    logout();
+    history.replace('/auth/login');
+  };
 
   const currentAvatar = AVATAR_OPTIONS.find((a) => a.id === avatarId)?.emoji ?? '🐼';
 
@@ -359,7 +372,7 @@ const ProfileScreen: React.FC = () => {
 
           {/* Logout */}
           <button
-            onClick={logout}
+            onClick={handleLogout}
             style={{
               width: '100%',
               padding: '14px',

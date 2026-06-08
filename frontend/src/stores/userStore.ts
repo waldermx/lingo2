@@ -44,6 +44,10 @@ export interface UserState {
   // Settings
   preferredLocale: string;
   dailyGoal: number;
+
+  // Onboarding & guest
+  onboardingCompleted: boolean;
+  guestReviews: number;
 }
 
 const LEVEL_THRESHOLDS = [0, 100, 250, 500, 900, 1500, 2500, 4000, 6000, 9000, 13000];
@@ -69,6 +73,7 @@ interface UserActions {
   unlockAchievement(id: string): void;
   setAchievements(achievements: Achievement[]): void;
   updateHeatmap(date: string, count: number): void;
+  incrementGuestReviews(): void;
   logout(): void;
 }
 
@@ -92,6 +97,8 @@ const INITIAL_STATE: UserState = {
   activityHeatmap: {},
   preferredLocale: 'es',
   dailyGoal: 10,
+  onboardingCompleted: false,
+  guestReviews: 0,
 };
 
 export const useUserStore = create<UserState & UserActions>()(
@@ -157,6 +164,10 @@ export const useUserStore = create<UserState & UserActions>()(
         set((s) => { s.activityHeatmap[date] = count; });
       },
 
+      incrementGuestReviews() {
+        set((s) => { s.guestReviews += 1; });
+      },
+
       logout() {
         set((s) => { Object.assign(s, INITIAL_STATE); });
       },
@@ -183,6 +194,8 @@ export const useUserStore = create<UserState & UserActions>()(
         activityHeatmap: s.activityHeatmap,
         preferredLocale: s.preferredLocale,
         dailyGoal: s.dailyGoal,
+        onboardingCompleted: s.onboardingCompleted,
+        guestReviews: s.guestReviews,
       }),
     },
   ),

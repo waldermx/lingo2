@@ -50,8 +50,8 @@ export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
       const useCase = new RegisterUser(userRepo, gamificationRepo);
       const user = await useCase.execute(body);
 
-      const accessToken = app.accessSign({ id: user.id, email: user.email });
-      const refreshToken = app.refreshSign({ id: user.id });
+      const accessToken = app.jwt.access.sign({ id: user.id, email: user.email });
+      const refreshToken = app.jwt.refresh.sign({ id: user.id });
       const refreshHash = await bcrypt.hash(refreshToken, 12);
       await userRepo.updateRefreshTokenHash(user.id, refreshHash);
 
@@ -77,8 +77,8 @@ export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
       const useCase = new LoginUser(userRepo);
       const user = await useCase.execute(body);
 
-      const accessToken = app.accessSign({ id: user.id, email: user.email });
-      const refreshToken = app.refreshSign({ id: user.id });
+      const accessToken = app.jwt.access.sign({ id: user.id, email: user.email });
+      const refreshToken = app.jwt.refresh.sign({ id: user.id });
       const refreshHash = await bcrypt.hash(refreshToken, 12);
       await userRepo.updateRefreshTokenHash(user.id, refreshHash);
 
@@ -109,15 +109,15 @@ export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
 
       let payload: { id: string };
       try {
-        payload = await app.refreshJwt.verify<{ id: string }>(rawToken);
+        payload = await app.jwt.refresh.verify<{ id: string }>(rawToken);
       } catch {
         return reply.code(401).send({
           error: { code: 'AUTH_INVALID_TOKEN', message: 'Invalid refresh token.', requestId: request.id },
         });
       }
 
-      const newAccessToken = app.accessSign({ id: payload.id, email: '' });
-      const newRefreshToken = app.refreshSign({ id: payload.id });
+      const newAccessToken = app.jwt.access.sign({ id: payload.id, email: '' });
+      const newRefreshToken = app.jwt.refresh.sign({ id: payload.id });
       const newHash = await bcrypt.hash(newRefreshToken, 12);
 
       const useCase = new RotateRefreshToken(userRepo);
@@ -128,7 +128,7 @@ export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
       });
 
       // Re-sign access token with correct email
-      const correctAccessToken = app.accessSign({ id: user.id, email: user.email });
+      const correctAccessToken = app.jwt.access.sign({ id: user.id, email: user.email });
 
       reply.setCookie(REFRESH_COOKIE, newRefreshToken, cookieOptions(app));
       return reply.send({

@@ -14,6 +14,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useHistory } from 'react-router-dom';
 import HanziWriter, { HanziWriterInstance } from 'hanzi-writer';
 import charactersData from '../data/characters.json';
+import { useUserStore } from '../stores/userStore';
 import './PracticeQuizScreen.css';
 
 interface Character {
@@ -50,8 +51,10 @@ const PracticeQuizScreen: React.FC = () => {
 
   const characters: Character[] = charactersData as Character[];
   const currentCharacter = characters[currentIndex];
+  const { userId, incrementGuestReviews } = useUserStore();
 
   const advanceNext = useCallback((correct: boolean) => {
+    if (!userId) incrementGuestReviews();
     const newResults = [...results, correct];
     setResults(newResults);
     setTimeout(() => {
@@ -64,7 +67,7 @@ const PracticeQuizScreen: React.FC = () => {
         history.push('/practice-results', { results: newResults });
       }
     }, 700);
-  }, [results, currentIndex, characters, history, inputMode]);
+  }, [results, currentIndex, characters, history, inputMode, userId, incrementGuestReviews]);
 
   // Init choices when mode=choice
   useEffect(() => {
@@ -86,8 +89,8 @@ const PracticeQuizScreen: React.FC = () => {
       outlineColor: 'var(--c-bg-tertiary)',
       strokeColor: 'var(--c-text)',
       drawingColor: 'var(--c-blue)',
-      drawingWidth: 40,
-      strokeWidth: 5,
+      drawingWidth: 30,
+      strokeWidth: 4,
       showHintAfterMisses: 2,
       highlightOnComplete: true,
       highlightColor: 'var(--c-green)',
@@ -168,7 +171,7 @@ const PracticeQuizScreen: React.FC = () => {
         </IonToolbar>
       </IonHeader>
 
-      <IonContent>
+      <IonContent scrollY={inputMode !== 'draw'}>
         <AnimatePresence mode="wait">
           <motion.div
             key={currentIndex}
@@ -182,7 +185,11 @@ const PracticeQuizScreen: React.FC = () => {
 
             {inputMode === 'draw' ? (
               <div className="quiz-writer-wrapper">
-                <div ref={containerRef} className="quiz-writer" style={{ width: 260, height: 260 }} />
+                <div
+                  ref={containerRef}
+                  className="quiz-writer"
+                  style={{ width: 260, height: 260, touchAction: 'none', pointerEvents: 'all', userSelect: 'none' }}
+                />
                 {showHint && (
                   <motion.div className="quiz-hint" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
                     Pinyin: <strong style={{ color: 'var(--c-blue)' }}>{currentCharacter.pinyin}</strong>

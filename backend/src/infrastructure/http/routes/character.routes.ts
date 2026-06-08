@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { CharacterRepository } from '../../database/prisma/repositories/CharacterRepository.js';
 import { GetCharacters } from '../../../application/characters/GetCharacters.js';
 import { GetCharacterById } from '../../../application/characters/GetCharacterById.js';
+import { SearchCharacters } from '../../../application/characters/SearchCharacters.js';
 import { SupportedLocale } from '@lingo2/shared';
 import type { CharacterDto } from '@lingo2/shared';
 import type { Character } from '../../../domain/entities/Character.js';
@@ -32,6 +33,27 @@ export async function registerCharacterRoutes(app: FastifyInstance): Promise<voi
         data: result.items.map((c) => toDto(c, locale)),
         meta: { page: result.page, totalPages: result.totalPages, total: result.total },
       });
+    },
+  );
+
+  const SearchQuery = z.object({
+    q: z.string().min(1),
+    locale: z.nativeEnum(SupportedLocale).optional(),
+    limit: z.coerce.number().int().min(1).max(50).optional(),
+  });
+
+  app.get(
+    '/characters/search',
+    {
+      preHandler: [app.authenticate],
+      schema: { tags: ['Characters'], summary: 'Search characters by pinyin, hanzi or definition' },
+    },
+    async (request, reply) => {
+      const { q, locale, limit } = SearchQuery.parse(request.query);
+      const loc = locale ?? (request.user as { preferredLocale?: SupportedLocale }).preferredLocale ?? SupportedLocale.ES;
+      const useCase = new SearchCharacters(repo);
+      const results = await useCase.execute(q, loc, limit);
+      return reply.send(results.map((c) => toDto(c, loc)));
     },
   );
 

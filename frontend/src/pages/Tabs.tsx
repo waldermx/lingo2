@@ -8,10 +8,13 @@ import ProgressScreen from './tabs/ProgressScreen';
 import GamesScreen from './tabs/GamesScreen';
 import DictionaryScreen from './tabs/DictionaryScreen';
 import ProfileScreen from './tabs/ProfileScreen';
+import GuestRegisterModal from '../components/GuestRegisterModal/GuestRegisterModal';
 import './Tabs.css';
 
 const Tabs: React.FC = () => {
   return (
+    <>
+    <GuestRegisterModal />
     <IonTabs>
       <IonRouterOutlet>
         <Route exact path="/tabs/practice">
@@ -61,6 +64,7 @@ const Tabs: React.FC = () => {
         </IonTabButton>
       </IonTabBar>
     </IonTabs>
+    </>
   );
 };
 
