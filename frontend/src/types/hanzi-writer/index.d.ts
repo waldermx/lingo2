@@ -20,6 +20,9 @@ declare module 'hanzi-writer' {
     highlightOnComplete?: boolean;
     highlightColor?: string;
     delayBetweenStrokes?: number;
+    charDataLoader?: (char: string, onComplete: (data: unknown) => void, onError: (err: unknown) => void) => void;
+    onLoadCharDataSuccess?: (data: unknown) => void;
+    onLoadCharDataError?: (reason: unknown) => void;
   }
 
   export interface QuizOptions {

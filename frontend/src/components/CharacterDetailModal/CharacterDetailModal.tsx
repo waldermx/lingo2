@@ -55,16 +55,18 @@ const CharacterDetailModal: React.FC<Props> = ({ character, isOpen, onClose }) =
     if (!isOpen || !character || !writerContainerRef.current) return;
     const el = writerContainerRef.current;
     while (el.firstChild) el.removeChild(el.firstChild);
+    const cs = getComputedStyle(document.documentElement);
     const writer = HanziWriter.create(el, character.character, {
       width: 140,
       height: 140,
       padding: 8,
       showOutline: true,
       showCharacter: true,
-      outlineColor: 'var(--c-bg-tertiary)',
-      strokeColor: 'var(--c-text)',
+      outlineColor: cs.getPropertyValue('--c-bg-tertiary').trim(),
+      strokeColor: cs.getPropertyValue('--c-text').trim(),
       strokeAnimationSpeed: 1,
       delayBetweenStrokes: 300,
+      onLoadCharDataError: (reason) => console.error('HanziWriter data load error:', reason),
     });
     return () => { writer.pauseAnimation(); };
   }, [isOpen, character]);

@@ -147,14 +147,17 @@ const BombModeScreen: React.FC = () => {
     if (phase !== 'playing' || inputMode !== 'draw' || !containerRef.current || queue.length === 0) return;
     const el = containerRef.current;
     while (el.firstChild) el.removeChild(el.firstChild);
+    const cs = getComputedStyle(document.documentElement);
     writerRef.current = HanziWriter.create(el, queue[currentIndex]?.character ?? '一', {
       width: 180,
       height: 180,
       padding: 10,
       showOutline: true,
-      strokeColor: 'var(--c-red)',
-      outlineColor: 'var(--c-bg-tertiary)',
+      strokeColor: cs.getPropertyValue('--c-red').trim(),
+      outlineColor: cs.getPropertyValue('--c-bg-tertiary').trim(),
+      drawingColor: cs.getPropertyValue('--c-red').trim(),
       highlightOnComplete: true,
+      onLoadCharDataError: (reason) => console.error('HanziWriter data load error:', reason),
     });
     writerRef.current.quiz({
       onMistake: () => {

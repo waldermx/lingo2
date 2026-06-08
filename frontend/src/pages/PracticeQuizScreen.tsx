@@ -89,22 +89,26 @@ const PracticeQuizScreen: React.FC = () => {
     const container = containerRef.current;
     while (container.firstChild) container.removeChild(container.firstChild);
 
+    const cs = getComputedStyle(document.documentElement);
+    const getColor = (v: string) => cs.getPropertyValue(v).trim();
+
     writerRef.current = HanziWriter.create(container, currentCharacter.character, {
       width: 260,
       height: 260,
       padding: 8,
       showOutline: false,
       showCharacter: false,
-      outlineColor: 'var(--c-bg-tertiary)',
-      strokeColor: 'var(--c-text)',
-      drawingColor: 'var(--c-blue)',
+      outlineColor: getColor('--c-bg-tertiary'),
+      strokeColor: getColor('--c-text'),
+      drawingColor: getColor('--c-blue'),
       drawingWidth: 30,
       strokeWidth: 4,
       showHintAfterMisses: 2,
       highlightOnComplete: true,
-      highlightColor: 'var(--c-green)',
+      highlightColor: getColor('--c-green'),
       strokeAnimationSpeed: 1.5,
       delayBetweenStrokes: 400,
+      onLoadCharDataError: (reason) => console.error('HanziWriter data load error:', reason),
     });
 
     writerRef.current.quiz({

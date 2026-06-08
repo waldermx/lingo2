@@ -46,29 +46,28 @@ const PracticeCard: React.FC<PracticeCardProps> = ({
         await new Promise(resolve => setTimeout(resolve, 100));
 
         // Crear nueva instancia de Hanzi Writer
+        const cs = getComputedStyle(document.documentElement);
         writerRef.current = HanziWriter.create(writerContainer, watermarkCharacter, {
           width: writerContainer.offsetWidth || 300,
           height: writerContainer.offsetHeight || 300,
           padding: 8,
           showOutline: true,
           showCharacter: false,
-          outlineColor: '#666666', // Más oscuro para mejor visibilidad
-          strokeColor: '#000000',
+          outlineColor: cs.getPropertyValue('--c-bg-tertiary').trim() || '#EBEBF0',
+          strokeColor: cs.getPropertyValue('--c-text').trim() || '#1D1D1F',
           radicalColor: null,
           strokeFadeDuration: 400,
           strokeHighlightSpeed: 2,
-          
-          // AJUSTES DE GROSOR - AUMENTADOS PARA MEJOR VISIBILIDAD
-          drawingWidth: 40,  // Aumentado de 4 a 6 (trazo del usuario)
-          strokeWidth: 5,   // Aumentado de 4 a 5 (líneas del carácter guía)
-          
+          drawingWidth: 40,
+          strokeWidth: 5,
           drawingFadeDuration: 300,
-          drawingColor: '#2E7D32', // Verde para trazo del usuario
+          drawingColor: cs.getPropertyValue('--c-green').trim() || '#30D158',
           showHintAfterMisses: 3,
           highlightOnComplete: true,
-          highlightColor: '#4CAF50',
+          highlightColor: cs.getPropertyValue('--c-green').trim() || '#30D158',
           delayBetweenStrokes: 400,
           strokeAnimationSpeed: 1.5,
+          onLoadCharDataError: (reason) => console.error('HanziWriter data load error:', reason),
         });
 
         // Iniciar el modo quiz
