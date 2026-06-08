@@ -45,7 +45,7 @@ const PracticeQuizScreen: React.FC = () => {
   const [inputMode, setInputMode] = useState<InputMode | null>(null); // null = selection screen
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showHint, setShowHint] = useState(false);
-  const [results, setResults] = useState<boolean[]>([]);
+  const [, setResults] = useState<boolean[]>([]);
   const [choices, setChoices] = useState<string[]>([]);
   const [choiceResult, setChoiceResult] = useState<'correct' | 'wrong' | null>(null);
 

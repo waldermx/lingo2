@@ -116,7 +116,6 @@ export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
         });
       }
 
-      const newAccessToken = app.jwt.access.sign({ id: payload.id, email: '' });
       const newRefreshToken = app.jwt.refresh.sign({ id: payload.id });
       const newHash = await bcrypt.hash(newRefreshToken, 12);
 

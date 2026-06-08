@@ -3,6 +3,7 @@
   "private": true,
   "version": "0.1.0",
   "description": "Lingo2 — Chinese language learning app with FSRS spaced repetition",
+  "packageManager": "pnpm@10.19.0",
   "scripts": {
     "dev": "pnpm --parallel -r dev",
     "build": "pnpm -r build",
