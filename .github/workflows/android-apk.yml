@@ -51,6 +51,8 @@ jobs:
 
       - name: Build web assets
         run: pnpm --filter=@lingo2/frontend build
+        env:
+          VITE_API_URL: ${{ secrets.VITE_API_URL }}
 
       - name: Generate Android project and sync Capacitor
         working-directory: frontend
