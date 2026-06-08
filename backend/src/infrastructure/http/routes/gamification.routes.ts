@@ -4,7 +4,6 @@ import { CardRepository } from '../../database/prisma/repositories/CardRepositor
 import { CharacterRepository } from '../../database/prisma/repositories/CharacterRepository.js';
 import { GetGamificationProgress } from '../../../application/gamification/GetGamificationProgress.js';
 import { GetAchievements } from '../../../application/gamification/GetAchievements.js';
-import { SupportedLocale } from '@lingo2/shared';
 
 export async function registerGamificationRoutes(app: FastifyInstance): Promise<void> {
   const gamificationRepo = new GamificationRepository(app.prisma);
