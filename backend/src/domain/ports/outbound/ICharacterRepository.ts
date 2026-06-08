@@ -51,4 +51,10 @@ export interface ICharacterRepository {
    * Used for progress calculation ("learned X / Y characters").
    */
   countByHSKLevel(hskLevel: number): Promise<number>;
+
+  /**
+   * Return only character IDs for a given HSK level (no translations loaded).
+   * Used by CompleteOnboarding to bulk-create cards efficiently.
+   */
+  findIdsByHSKLevel(hskLevel: number): Promise<string[]>;
 }

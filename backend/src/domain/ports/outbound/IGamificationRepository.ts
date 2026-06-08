@@ -25,4 +25,7 @@ export interface IGamificationRepository {
 
   /** Return all achievement IDs already unlocked by the user. */
   getUnlockedAchievementIds(userId: string): Promise<string[]>;
+
+  /** Return all unlocked achievements with their unlock timestamps. */
+  getUnlockedAchievements(userId: string): Promise<IUnlockedAchievement[]>;
 }

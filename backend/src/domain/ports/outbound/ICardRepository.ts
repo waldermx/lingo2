@@ -47,6 +47,13 @@ export interface ICardRepository {
   upsert(card: Card): Promise<Card>;
 
   /**
+   * Bulk-create state=New cards for a list of characters.
+   * Used during onboarding to populate the initial deck.
+   * Silently skips characters that already have a card (skipDuplicates).
+   */
+  createManyNew(userId: string, characterIds: string[]): Promise<void>;
+
+  /**
    * Count cards by state for a user, keyed by CardState enum value.
    * Used for the progress distribution chart.
    */
@@ -57,4 +64,10 @@ export interface ICardRepository {
    * Used for "mastered" progress calculation.
    */
   countMasteredByUserAndHSK(userId: string, hskLevel: number): Promise<number>;
+
+  /**
+   * Count cards with state > 0 (introduced to user) for a given HSK level.
+   * Used for the "learned" progress count in the gamification dashboard.
+   */
+  countLearnedByUserAndHSK(userId: string, hskLevel: number): Promise<number>;
 }

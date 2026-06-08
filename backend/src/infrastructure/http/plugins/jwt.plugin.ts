@@ -59,6 +59,8 @@ declare module 'fastify' {
     accessVerify: () => Promise<{ id: string; email: string }>;
     refreshSign: (payload: object) => string;
     refreshVerify: () => Promise<{ id: string; tokenVersion: number }>;
+    /** Raw @fastify/jwt instance for the 'refresh' namespace (verify tokens from cookies/body). */
+    refreshJwt: { verify<T = unknown>(token: string): Promise<T> };
   }
   interface FastifyRequest {
     accessVerify: () => Promise<{ id: string; email: string; iat: number; exp: number }>;
