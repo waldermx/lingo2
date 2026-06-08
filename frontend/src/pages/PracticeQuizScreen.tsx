@@ -182,31 +182,43 @@ const PracticeQuizScreen: React.FC = () => {
       </IonHeader>
 
       <IonContent scrollY={inputMode !== 'draw'}>
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={currentIndex}
-            className="quiz-scene"
-            initial={{ opacity: 0, x: 30 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -30 }}
-            transition={{ duration: 0.22 }}
-          >
-            <div className="quiz-definition">{currentCharacter.definition}</div>
-
-            {inputMode === 'draw' ? (
-              <div className="quiz-writer-wrapper">
-                <div
-                  ref={containerRef}
-                  className="quiz-writer"
-                  style={{ width: 260, height: 260, touchAction: 'none', pointerEvents: 'all', userSelect: 'none' }}
-                />
-                {showHint && (
-                  <motion.div className="quiz-hint" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-                    Pinyin: <strong style={{ color: 'var(--c-blue)' }}>{currentCharacter.pinyin}</strong>
-                  </motion.div>
-                )}
-              </div>
-            ) : (
+        {inputMode === 'draw' ? (
+          <div className="quiz-scene">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={currentIndex}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.15 }}
+              >
+                <div className="quiz-definition">{currentCharacter.definition}</div>
+              </motion.div>
+            </AnimatePresence>
+            <div className="quiz-writer-wrapper">
+              <div
+                ref={containerRef}
+                className="quiz-writer"
+                style={{ width: 260, height: 260, touchAction: 'none', pointerEvents: 'all', userSelect: 'none' }}
+              />
+              {showHint && (
+                <motion.div className="quiz-hint" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+                  Pinyin: <strong style={{ color: 'var(--c-blue)' }}>{currentCharacter.pinyin}</strong>
+                </motion.div>
+              )}
+            </div>
+          </div>
+        ) : (
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={currentIndex}
+              className="quiz-scene"
+              initial={{ opacity: 0, x: 30 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -30 }}
+              transition={{ duration: 0.22 }}
+            >
+              <div className="quiz-definition">{currentCharacter.definition}</div>
               <div className="quiz-choice-wrapper">
                 <span className="quiz-choice-hanzi">{currentCharacter.character}</span>
                 <div className="quiz-choices">
@@ -215,7 +227,7 @@ const PracticeQuizScreen: React.FC = () => {
                     return (
                       <motion.button
                         key={choice}
-                        className={`quiz-choice-btn ${choiceResult && isCorrect ? 'correct' : ''} ${choiceResult === 'wrong' && !isCorrect && choice === choices[0] ? '' : ''}`}
+                        className={`quiz-choice-btn ${choiceResult && isCorrect ? 'correct' : ''}`}
                         style={{
                           background: choiceResult && isCorrect ? 'var(--c-green-bg)' : 'var(--c-surface)',
                           borderColor: choiceResult && isCorrect ? 'var(--c-green)' : 'var(--c-separator)',
@@ -230,9 +242,9 @@ const PracticeQuizScreen: React.FC = () => {
                   })}
                 </div>
               </div>
-            )}
-          </motion.div>
-        </AnimatePresence>
+            </motion.div>
+          </AnimatePresence>
+        )}
       </IonContent>
     </IonPage>
   );

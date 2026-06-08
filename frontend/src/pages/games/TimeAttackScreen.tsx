@@ -358,6 +358,9 @@ const TimeAttackScreen: React.FC = () => {
                   <div
                     ref={containerRef}
                     style={{
+                      width: 180,
+                      height: 180,
+                      touchAction: 'none',
                       background: 'var(--c-surface)',
                       borderRadius: 20,
                       boxShadow: '0 4px 24px rgba(0,0,0,0.10)',

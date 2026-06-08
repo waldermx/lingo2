@@ -138,30 +138,14 @@ const PracticeCard: React.FC<PracticeCardProps> = ({
     };
   }, [isWriterReady]);
 
-  // Manejar inicio de dibujo
-  const handleTouchStart = (e: React.TouchEvent | React.MouseEvent) => {
-    e.preventDefault();
-    onDrawStart?.();
-  };
-
-  // Manejar fin de dibujo
-  const handleTouchEnd = (e: React.TouchEvent | React.MouseEvent) => {
-    e.preventDefault();
-    onDrawEnd?.();
-  };
-
   return (
     <div className={styles.cardContainer}>
       <div className={styles.practiceCard}>
         {/* Contenedor para Hanzi Writer */}
-        <div 
+        <div
           ref={containerRef}
           className={styles.writerContainer}
-          onMouseDown={handleTouchStart}
-          onMouseUp={handleTouchEnd}
-          onTouchStart={handleTouchStart}
-          onTouchEnd={handleTouchEnd}
-          style={{ cursor: 'crosshair' }}
+          style={{ cursor: 'crosshair', touchAction: 'none' }}
           aria-label={`Practice writing the character ${watermarkCharacter}`}
           role="application"
         />
