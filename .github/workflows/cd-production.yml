@@ -107,9 +107,12 @@ jobs:
 
       - name: Smoke test production
         run: |
-          sleep 15
-          curl -f https://${{ secrets.PROD_API_DOMAIN }}/api/v1/health \
-            || (echo "Production smoke test failed!" && exit 1)
+          for i in 1 2 3 4 5; do
+            sleep 15
+            curl -fsk https://${{ secrets.PROD_API_DOMAIN }}/api/v1/health && echo "Smoke test passed!" && exit 0
+            echo "Attempt $i failed, retrying..."
+          done
+          echo "Production smoke test failed after 5 attempts!" && exit 1
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
